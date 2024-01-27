@@ -99,18 +99,18 @@ export const organiserProcedure = t.procedure
     return next();
   });
 
-  export const memberProcedure = t.procedure
+export const memberProcedure = t.procedure
   .input(z.object({ userId: z.string(), groupId: z.number().int() }))
   .use(async ({ ctx, input: { groupId, userId }, next }) => {
     const isMember = await ctx.db
-        .select()
-        .from(groupMembership)
-        .where(
-          and(
-            eq(groupMembership.userId, userId),
-            eq(groupMembership.groupId, groupId),
-          ),
-        );
+      .select()
+      .from(groupMembership)
+      .where(
+        and(
+          eq(groupMembership.userId, userId),
+          eq(groupMembership.groupId, groupId),
+        ),
+      );
 
     if (isMember.length === 0) {
       throw new TRPCError({
