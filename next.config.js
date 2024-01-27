@@ -35,6 +35,20 @@ const config = withSerwist({
             ? "http://localhost:8000/apy/:path*"
             : "/apy/",
       },
+      {
+        source: "/docs",
+        destination:
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:8000/docs"
+            : "/api/docs",
+      },
+      {
+        source: "/openapi.json",
+        destination:
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:8000/openapi.json"
+            : "/api/openapi.json",
+      },
     ];
   },
 });
