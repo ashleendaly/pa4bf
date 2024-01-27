@@ -3,6 +3,8 @@ import "~/styles/globals.css";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { Inter as FontSans } from "next/font/google";
 
+import { Header } from "~/components/header";
+import { ThemeProvider } from "~/components/theme-provider";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const fontSans = FontSans({
@@ -25,7 +27,14 @@ export default function RootLayout({
     <html lang="en">
       <UserProvider>
         <body className={`font-sans ${fontSans.variable}`}>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <TRPCReactProvider>
+            <ThemeProvider attribute="class" defaultTheme="system">
+              <Header />
+              <main className="min-h-[90dvh] w-full bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+                {children}
+              </main>
+            </ThemeProvider>
+          </TRPCReactProvider>
         </body>
       </UserProvider>
     </html>
