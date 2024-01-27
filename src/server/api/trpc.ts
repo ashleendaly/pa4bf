@@ -11,7 +11,7 @@ import superjson from "superjson";
 import { ZodError, z } from "zod";
 
 import { db } from "~/server/db";
-import { groupOwnership } from "../db/schema";
+import { groupMembership, groupOwnership } from "../db/schema";
 import { and, eq } from "drizzle-orm";
 
 /**
@@ -91,6 +91,28 @@ export const organiserProcedure = t.procedure
       );
 
     if (isOwner.length === 0) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+      });
+    }
+
+    return next();
+  });
+
+  export const memberProcedure = t.procedure
+  .input(z.object({ userId: z.string(), groupId: z.number().int() }))
+  .use(async ({ ctx, input: { groupId, userId }, next }) => {
+    const isMember = await ctx.db
+        .select()
+        .from(groupMembership)
+        .where(
+          and(
+            eq(groupMembership.userId, userId),
+            eq(groupMembership.groupId, groupId),
+          ),
+        );
+
+    if (isMember.length === 0) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
       });

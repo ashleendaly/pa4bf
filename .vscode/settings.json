@@ -1,5 +1,8 @@
 {
-  "cSpell.words": ["qrcode", "serwist"],
+  "cSpell.words": [
+    "qrcode",
+    "serwist"
+  ],
   "material-icon-theme.folders.associations": {
     "apy": "api",
     "trpc": "config",
