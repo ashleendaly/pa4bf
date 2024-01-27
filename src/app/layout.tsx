@@ -6,9 +6,9 @@ import { Inter as FontSans } from "next/font/google";
 
 import { Header } from "~/components/header";
 import { ThemeProvider } from "~/components/theme-provider";
-import { TRPCReactProvider } from "~/trpc/react";
-import { cn } from "~/lib/utils";
 import { Toaster } from "~/components/ui/sonner";
+import { cn } from "~/lib/utils";
+import { TRPCReactProvider } from "~/trpc/react";
 
 const fontSans = FontSans({
   subsets: ["latin"],
