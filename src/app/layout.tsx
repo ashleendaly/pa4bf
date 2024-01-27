@@ -1,5 +1,6 @@
 import "~/styles/globals.css";
 
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
@@ -22,9 +23,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
-      </body>
+      <UserProvider>
+        <body className={`font-sans ${inter.variable}`}>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </body>
+      </UserProvider>
     </html>
   );
 }
