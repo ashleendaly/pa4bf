@@ -1,5 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
+import { generate } from "random-words";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { group, groupMembership, groupOwnership } from "~/server/db/schema";
@@ -9,11 +10,18 @@ export const groupRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
-        inviteCode: z.string(),
         displayName: z.string(),
       }),
     )
-    .mutation(async ({ ctx, input: { userId, inviteCode, displayName } }) => {
+    .mutation(async ({ ctx, input: { userId, displayName } }) => {
+      const inviteCode = generate({
+        exactly: 1,
+        wordsPerString: 3,
+        minLength: 4,
+        maxLength: 4,
+        separator: "-",
+      }).at(0)!;
+
       const [newGroup] = await ctx.db
         .insert(group)
         .values({ inviteCode, displayName })
@@ -23,6 +31,8 @@ export const groupRouter = createTRPCRouter({
 
       await ctx.db.insert(groupMembership).values({ groupId, userId });
       await ctx.db.insert(groupOwnership).values({ groupId, userId });
+
+      return groupId;
     }),
 
   delete: publicProcedure

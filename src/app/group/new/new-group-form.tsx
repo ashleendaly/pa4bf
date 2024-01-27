@@ -1,7 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import { Button } from "~/components/ui/button";
@@ -15,6 +17,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { api } from "~/trpc/react";
 
 const formSchema = z.object({
   displayName: z.string().min(2, {
@@ -22,7 +25,10 @@ const formSchema = z.object({
   }),
 });
 
-export function NewGroupForm() {
+export function NewGroupForm({ userId }: { userId: string }) {
+  const router = useRouter();
+  const { mutateAsync: createGroupAsync } = api.group.create.useMutation();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -30,9 +36,13 @@ export function NewGroupForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // TODO: add mutation
-    console.log(values);
+  function onSubmit({ displayName }: z.infer<typeof formSchema>) {
+    void toast.promise(
+      createGroupAsync({ displayName, userId }).then((groupId) =>
+        router.push(`/group/${groupId}`),
+      ),
+      { success: "success", loading: "loading...", error: "error" },
+    );
   }
   return (
     <Form {...form}>
