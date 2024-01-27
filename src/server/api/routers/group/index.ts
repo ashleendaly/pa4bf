@@ -1,9 +1,12 @@
-import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import { generate as generateRandomWords } from "random-words";
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  memberProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { group, groupMembership, groupOwnership } from "~/server/db/schema";
 import { groupAdminRouter } from "./admin";
 
@@ -39,21 +42,9 @@ export const groupRouter = createTRPCRouter({
       return groupId;
     }),
 
-  details: publicProcedure
+  details: memberProcedure
     .input(z.object({ groupId: z.number().int(), userId: z.string() }))
-    .query(async ({ ctx, input: { groupId, userId } }) => {
-      const [isMember] = await ctx.db
-        .select()
-        .from(groupMembership)
-        .where(
-          and(
-            eq(groupMembership.groupId, groupId),
-            eq(groupMembership.userId, userId),
-          ),
-        );
-
-      if (!isMember) throw new TRPCError({ code: "UNAUTHORIZED" });
-
+    .query(async ({ ctx, input: { groupId } }) => {
       return await ctx.db.select().from(group).where(eq(group.id, groupId));
     }),
 
@@ -77,7 +68,7 @@ export const groupRouter = createTRPCRouter({
       return true;
     }),
 
-  isMember: publicProcedure
+  isMember: memberProcedure
     .input(z.object({ userId: z.string(), groupId: z.number().int() }))
     .query(async ({ ctx, input: { groupId, userId } }) => {
       const isOwner = await ctx.db
