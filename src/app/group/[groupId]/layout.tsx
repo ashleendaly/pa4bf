@@ -2,6 +2,7 @@ import { getSession } from "@auth0/nextjs-auth0";
 import { type ReactNode } from "react";
 import { z } from "zod";
 import { api } from "~/trpc/server";
+import { QrCode } from "./qr-code";
 
 interface pageProps {
   children: ReactNode;
@@ -47,6 +48,7 @@ export default async function Layout({
       <div>
         groupId - [{displayName}, {inviteCode}]
       </div>
+      <QrCode code={inviteCode} />
       {isOrganiser ? organiser : member}
     </div>
   );
