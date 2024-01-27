@@ -4,8 +4,18 @@
  */
 await import("./src/env.js");
 
+import withSerwistInit from "@serwist/next";
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const withSerwist = withSerwistInit({
+  // Note: This is only an example. If you use Pages Router,
+  // use something else that works, such as "service-worker/index.ts".
+  swSrc: "src/sw.ts",
+  swDest: "public/sw.js",
+});
+
 /** @type {import("next").NextConfig} */
-const config = {
+const config = withSerwist({
   images: {
     remotePatterns: [
       {
@@ -41,6 +51,6 @@ const config = {
       },
     ];
   },
-};
+});
 
 export default config;
