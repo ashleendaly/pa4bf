@@ -6,11 +6,13 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { initTRPC } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
-import { ZodError } from "zod";
+import { ZodError, z } from "zod";
 
 import { db } from "~/server/db";
+import { groupOwnership } from "../db/schema";
+import { and, eq } from "drizzle-orm";
 
 /**
  * 1. CONTEXT
@@ -74,3 +76,25 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+export const organiserProcedure = t.procedure
+  .input(z.object({ organiserId: z.string(), groupId: z.number().int() }))
+  .use(async ({ ctx, input: { groupId, organiserId }, next }) => {
+    const isOwner = await ctx.db
+      .select()
+      .from(groupOwnership)
+      .where(
+        and(
+          eq(groupOwnership.userId, organiserId),
+          eq(groupOwnership.groupId, groupId),
+        ),
+      );
+
+    if (isOwner.length === 0) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+      });
+    }
+
+    return next();
+  });
