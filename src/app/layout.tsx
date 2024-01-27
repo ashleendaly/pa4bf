@@ -4,8 +4,9 @@ import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { Inter as FontSans } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
+import { cn } from "~/lib/utils";
 
-export const fontSans = FontSans({
+const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -22,9 +23,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head />
       <UserProvider>
-        <body className={`font-sans ${fontSans.variable}`}>
+        <body className={cn("font-sans", fontSans.variable)}>
           <TRPCReactProvider>{children}</TRPCReactProvider>
         </body>
       </UserProvider>
