@@ -20,7 +20,7 @@ export const createTable = pgTableCreator((name) => `pa4bf_${name}`);
 
 export const picture = createTable("picture", {
   id: serial("picture_id").primaryKey(),
-  metadata: text("metadata"),
+  caption: text("caption"),
 });
 
 export const group = createTable("group", {
