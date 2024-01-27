@@ -17,5 +17,5 @@ export async function AuthButton() {
 export async function getUserId() {
   const session = await getSession();
   if (!session) return undefined;
-  return session.user.sid as string | undefined;
+  return session.user.email as string | undefined;
 }

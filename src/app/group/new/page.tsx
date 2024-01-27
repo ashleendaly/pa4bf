@@ -8,7 +8,7 @@ export default async function Page() {
   const session = await getSession();
   if (!session) return;
 
-  const userId = z.string().parse(session.user.sid);
+  const userId = z.string().parse(session.user.email);
 
   return (
     <PageWrapper className="flex flex-col items-start justify-start gap-10 pt-20">
