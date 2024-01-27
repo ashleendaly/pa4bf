@@ -1,7 +1,7 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { relations } from "drizzle-orm";
+import { type InferSelectModel, relations } from "drizzle-orm";
 import {
   integer,
   pgTableCreator,
@@ -118,3 +118,5 @@ export const task = createTable("task", {
   points: integer("points").notNull(),
   aiJudge: boolean("ai_judge"),
 });
+
+export type Task = InferSelectModel<typeof task>;
