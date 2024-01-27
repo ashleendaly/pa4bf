@@ -12,6 +12,8 @@ uvicorn = {extras = ["standard"], version = "^0.27.0"}
 redis = "^5.0.1"
 python-dotenv = "^1.0.1"
 requests = "^2.31.0"
+numpy = "^1.26.3"
+sentence-transformers = "^2.2.2"
 
 
 [build-system]
