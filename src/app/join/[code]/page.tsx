@@ -1,27 +1,22 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { toast } from "sonner";
-
 import { Spinner } from "~/components/ui/spinner";
-import { api } from "~/trpc/react";
+import { JoinGroup } from "./join-group";
+import { getSession } from "@auth0/nextjs-auth0";
+import { z } from "zod";
 
-export default function JoinClub({
+export default async function JoinClub({
   params: { code },
 }: {
   params: { code: string };
 }) {
-  const router = useRouter();
-  // const { mutateAsync: joinClubAsync } = api.club.members.join.useMutation();
+  const session = await getSession();
 
-  // useEffect(() => {
-  //   void joinClubAsync({ joinCode: code })
-  //     .then(({ name: clubName }) => router.push(`/club/${clubName}`))
-  //     .catch(() => toast.error("Invalid Join Code"));
-  // }, [code, joinClubAsync, router]);
+  if (!session) return <>you must be logged in</>;
+
+  const id = z.string().parse(session.user.sid);
 
   return (
     <div className="grid h-[80dvh] place-items-center">
+      <JoinGroup code={code} userId={id} />
       <Spinner />
     </div>
   );

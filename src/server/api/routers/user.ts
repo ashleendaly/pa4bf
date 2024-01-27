@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -9,11 +10,23 @@ export const userRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
-        groupId: z.number().int(),
         inviteCode: z.string(),
       }),
     )
-    .mutation(async ({ ctx, input: { userId, groupId, inviteCode } }) => {
+    .mutation(async ({ ctx, input: { userId, inviteCode } }) => {
+      const [groupData] = await ctx.db
+        .select()
+        .from(group)
+        .where(eq(group.inviteCode, inviteCode));
+
+      if (!groupData) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        });
+      }
+
+      const { id: groupId } = groupData;
+
       const alreadyIn = await ctx.db
         .select()
         .from(groupMembership)
@@ -23,17 +36,13 @@ export const userRouter = createTRPCRouter({
             eq(groupMembership.groupId, groupId),
           ),
         );
+
       if (alreadyIn.length !== 0) {
-        return;
+        return groupData.id;
       }
-      const validCode = await ctx.db
-        .select()
-        .from(group)
-        .where(eq(group.inviteCode, inviteCode));
-      if (validCode.length === 0) {
-        return;
-      }
+
       await ctx.db.insert(groupMembership).values({ groupId, userId });
+      return groupData.id;
     }),
 
   leave: publicProcedure
