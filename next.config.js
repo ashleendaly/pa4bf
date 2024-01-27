@@ -5,6 +5,28 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "",
+        pathname: "**",
+      },
+    ],
+  },
+  rewrites: async () => {
+    return [
+      {
+        source: "/apy/:path*",
+        destination:
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:8000/apy/:path*"
+            : "/apy/",
+      },
+    ];
+  },
+};
 
 export default config;
