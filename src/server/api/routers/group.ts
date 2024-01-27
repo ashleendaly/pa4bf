@@ -90,6 +90,52 @@ export const groupRouter = createTRPCRouter({
       }
       await ctx.db.delete(groupOwnership).where(and(eq(groupOwnership.userId, toBeKickedId), eq(groupOwnership.groupId, groupId)))
       await ctx.db.delete(groupMembership).where(and(eq(groupMembership.userId, toBeKickedId), eq(groupOwnership.groupId, groupId)))
+    }),
+
+  makeOwner: publicProcedure
+    .input(
+        z.object({
+            userId: z.string(),
+            toBeOwnerId: z.string(),
+            groupId: z.number().int()
+        })
+    )
+    .mutation(async ({ ctx, input: { userId, toBeOwnerId, groupId } }) => {
+      if(userId === toBeOwnerId){
+        return
+      }
+      const isOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, userId), eq(groupOwnership.groupId, groupId)))
+      if(isOwner.length === 0){
+        return
+      }
+      const isntOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, toBeOwnerId), eq(groupOwnership.groupId, groupId)))
+      if(isntOwner.length !== 0){
+        return
+      }
+      await ctx.db.insert(groupOwnership).values({userId: toBeOwnerId, groupId: groupId})
+    }),
+
+  removeOwner: publicProcedure
+    .input(
+        z.object({
+            userId: z.string(),
+            tonotBeOwnerId: z.string(),
+            groupId: z.number().int()
+        })
+    )
+    .mutation(async ({ ctx, input: { userId, tonotBeOwnerId, groupId } }) => {
+      if(userId === tonotBeOwnerId){
+        return
+      }
+      const isOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, userId), eq(groupOwnership.groupId, groupId)))
+      if(isOwner.length === 0){
+        return
+      }
+      const isntOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, tonotBeOwnerId), eq(groupOwnership.groupId, groupId)))
+      if(isntOwner.length !== 0){
+        return
+      }
+      await ctx.db.delete(groupOwnership).where(and(eq(groupOwnership.userId, tonotBeOwnerId), eq(groupOwnership.groupId, groupId)))
     })
 
     //create group
@@ -97,4 +143,6 @@ export const groupRouter = createTRPCRouter({
     //rename group
     //remake group code
     //kick member from group
+    //make member owner of group
+    //remove ownership of member from group
 });
