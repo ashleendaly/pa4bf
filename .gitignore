@@ -42,4 +42,4 @@ yarn-error.log*
 *.tsbuildinfo
 
 # Python
-/__pychache__
+/__pycache__
