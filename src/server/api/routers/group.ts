@@ -29,34 +29,57 @@ export const groupRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
-        groupId: z.number().int()
-      })
+        groupId: z.number().int(),
+      }),
     )
     .mutation(async ({ ctx, input: { userId, groupId } }) => {
-      const isOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, userId), eq(groupOwnership.groupId, groupId)))
-      if(isOwner.length === 0){
-        return
+      const isOwner = await ctx.db
+        .select()
+        .from(groupOwnership)
+        .where(
+          and(
+            eq(groupOwnership.userId, userId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
+      if (isOwner.length === 0) {
+        return;
       }
-      await ctx.db.delete(groupOwnership).where(eq(groupOwnership.groupId, groupId))
-      await ctx.db.delete(group).where(eq(group.id, groupId))
-      await ctx.db.delete(groupMembership).where(eq(groupMembership.groupId, groupId))
-      //TODO: add to delete any pictures owned 
+      await ctx.db
+        .delete(groupOwnership)
+        .where(eq(groupOwnership.groupId, groupId));
+      await ctx.db.delete(group).where(eq(group.id, groupId));
+      await ctx.db
+        .delete(groupMembership)
+        .where(eq(groupMembership.groupId, groupId));
+      //TODO: add to delete any pictures owned
     }),
-    
+
   rename: publicProcedure
     .input(
       z.object({
         userId: z.string(),
         groupId: z.number().int(),
-        newName: z.string()
-      })
+        newName: z.string(),
+      }),
     )
     .mutation(async ({ ctx, input: { userId, groupId, newName } }) => {
-      const isOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, userId), eq(groupOwnership.groupId, groupId)))
-      if(isOwner.length === 0){
-        return
+      const isOwner = await ctx.db
+        .select()
+        .from(groupOwnership)
+        .where(
+          and(
+            eq(groupOwnership.userId, userId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
+      if (isOwner.length === 0) {
+        return;
       }
-      await ctx.db.update(group).set({displayName: newName}).where(eq(group.id, groupId))
+      await ctx.db
+        .update(group)
+        .set({ displayName: newName })
+        .where(eq(group.id, groupId));
     }),
 
   redoCode: publicProcedure
@@ -64,15 +87,26 @@ export const groupRouter = createTRPCRouter({
       z.object({
         userId: z.string(),
         groupId: z.number().int(),
-        newCode: z.string()
-      })
+        newCode: z.string(),
+      }),
     )
-    .mutation(async ({ ctx, input: { userId, groupId, newCode } }) =>{
-      const isOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, userId), eq(groupOwnership.groupId, groupId)))
-      if(isOwner.length === 0){
-        return
+    .mutation(async ({ ctx, input: { userId, groupId, newCode } }) => {
+      const isOwner = await ctx.db
+        .select()
+        .from(groupOwnership)
+        .where(
+          and(
+            eq(groupOwnership.userId, userId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
+      if (isOwner.length === 0) {
+        return;
       }
-      await ctx.db.update(group).set({inviteCode: newCode}).where(eq(group.id, groupId))
+      await ctx.db
+        .update(group)
+        .set({ inviteCode: newCode })
+        .where(eq(group.id, groupId));
     }),
 
   kick: publicProcedure
@@ -80,69 +114,132 @@ export const groupRouter = createTRPCRouter({
       z.object({
         userId: z.string(),
         toBeKickedId: z.string(),
-        groupId: z.number().int()
-      })
+        groupId: z.number().int(),
+      }),
     )
-    .mutation(async ({ ctx, input: { userId, toBeKickedId, groupId } }) =>{
-      const isOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, userId), eq(groupOwnership.groupId, groupId)))
-      if(isOwner.length === 0){
-        return
+    .mutation(async ({ ctx, input: { userId, toBeKickedId, groupId } }) => {
+      const isOwner = await ctx.db
+        .select()
+        .from(groupOwnership)
+        .where(
+          and(
+            eq(groupOwnership.userId, userId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
+      if (isOwner.length === 0) {
+        return;
       }
-      await ctx.db.delete(groupOwnership).where(and(eq(groupOwnership.userId, toBeKickedId), eq(groupOwnership.groupId, groupId)))
-      await ctx.db.delete(groupMembership).where(and(eq(groupMembership.userId, toBeKickedId), eq(groupOwnership.groupId, groupId)))
+      await ctx.db
+        .delete(groupOwnership)
+        .where(
+          and(
+            eq(groupOwnership.userId, toBeKickedId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
+      await ctx.db
+        .delete(groupMembership)
+        .where(
+          and(
+            eq(groupMembership.userId, toBeKickedId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
     }),
 
   makeOwner: publicProcedure
     .input(
-        z.object({
-            userId: z.string(),
-            toBeOwnerId: z.string(),
-            groupId: z.number().int()
-        })
+      z.object({
+        userId: z.string(),
+        toBeOwnerId: z.string(),
+        groupId: z.number().int(),
+      }),
     )
     .mutation(async ({ ctx, input: { userId, toBeOwnerId, groupId } }) => {
-      if(userId === toBeOwnerId){
-        return
+      if (userId === toBeOwnerId) {
+        return;
       }
-      const isOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, userId), eq(groupOwnership.groupId, groupId)))
-      if(isOwner.length === 0){
-        return
+      const isOwner = await ctx.db
+        .select()
+        .from(groupOwnership)
+        .where(
+          and(
+            eq(groupOwnership.userId, userId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
+      if (isOwner.length === 0) {
+        return;
       }
-      const isntOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, toBeOwnerId), eq(groupOwnership.groupId, groupId)))
-      if(isntOwner.length !== 0){
-        return
+      const isntOwner = await ctx.db
+        .select()
+        .from(groupOwnership)
+        .where(
+          and(
+            eq(groupOwnership.userId, toBeOwnerId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
+      if (isntOwner.length !== 0) {
+        return;
       }
-      await ctx.db.insert(groupOwnership).values({userId: toBeOwnerId, groupId: groupId})
+      await ctx.db
+        .insert(groupOwnership)
+        .values({ userId: toBeOwnerId, groupId: groupId });
     }),
 
   removeOwner: publicProcedure
     .input(
-        z.object({
-            userId: z.string(),
-            tonotBeOwnerId: z.string(),
-            groupId: z.number().int()
-        })
+      z.object({
+        userId: z.string(),
+        tonotBeOwnerId: z.string(),
+        groupId: z.number().int(),
+      }),
     )
     .mutation(async ({ ctx, input: { userId, tonotBeOwnerId, groupId } }) => {
-      if(userId === tonotBeOwnerId){
-        return
+      if (userId === tonotBeOwnerId) {
+        return;
       }
-      const isOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, userId), eq(groupOwnership.groupId, groupId)))
-      if(isOwner.length === 0){
-        return
+      const isOwner = await ctx.db
+        .select()
+        .from(groupOwnership)
+        .where(
+          and(
+            eq(groupOwnership.userId, userId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
+      if (isOwner.length === 0) {
+        return;
       }
-      const isntOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, tonotBeOwnerId), eq(groupOwnership.groupId, groupId)))
-      if(isntOwner.length !== 0){
-        return
+      const isntOwner = await ctx.db
+        .select()
+        .from(groupOwnership)
+        .where(
+          and(
+            eq(groupOwnership.userId, tonotBeOwnerId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
+      if (isntOwner.length !== 0) {
+        return;
       }
-      await ctx.db.delete(groupOwnership).where(and(eq(groupOwnership.userId, tonotBeOwnerId), eq(groupOwnership.groupId, groupId)))
-    })
+      await ctx.db
+        .delete(groupOwnership)
+        .where(
+          and(
+            eq(groupOwnership.userId, tonotBeOwnerId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
+    }),
 
-    //create group
-    //delete group
-    //rename group
-    //remake group code
-    //kick member from group
-    //make member owner of group
-    //remove ownership of member from group
+  //create group
+  //delete group
+  //rename group
+  //remake group code
+  //kick member from group
+  //make member owner of group
+  //remove ownership of member from group
 });
