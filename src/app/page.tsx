@@ -1,7 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 
-import { CreatePost } from "~/app/_components/create-post";
 import { Login } from "~/components/auth";
 import { api } from "~/trpc/server";
 
@@ -45,18 +44,7 @@ export default async function Home() {
           </p>
         </div>
         <Login />
-
-        <CrudShowcase />
       </div>
     </main>
-  );
-}
-
-async function CrudShowcase() {
-  return (
-    <div className="w-full max-w-xs">
-      <p>You have no posts yet.</p>
-      <CreatePost />
-    </div>
   );
 }
