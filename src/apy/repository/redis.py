@@ -1,4 +1,3 @@
-from PIL import Image
 from io import BytesIO
 import redis
 import hashlib
