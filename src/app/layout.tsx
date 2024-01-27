@@ -4,8 +4,11 @@ import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { type Metadata, type Viewport } from "next";
 import { Inter as FontSans } from "next/font/google";
 
+import { Header } from "~/components/header";
+import { ThemeProvider } from "~/components/theme-provider";
 import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "~/lib/utils";
+import { Toaster } from "~/components/ui/sonner";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -68,7 +71,15 @@ export default function RootLayout({
       <head />
       <UserProvider>
         <body className={cn("font-sans", fontSans.variable)}>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <TRPCReactProvider>
+            <ThemeProvider attribute="class" defaultTheme="system">
+              <Header />
+              <main className="min-h-[90dvh] w-full bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+                {children}
+              </main>
+              <Toaster />
+            </ThemeProvider>
+          </TRPCReactProvider>
         </body>
       </UserProvider>
     </html>

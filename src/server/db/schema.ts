@@ -42,9 +42,9 @@ export const userPicture = createTable(
   }),
 );
 
-export const userPictureRelations = relations(userPicture, ({ many }) => ({
-  post: many(picture),
-}));
+// export const userPictureRelations = relations(userPicture, ({ many }) => ({
+//   pictures: many(picture),
+// }));
 
 export const groupPicture = createTable(
   "group_picture",
@@ -61,9 +61,9 @@ export const groupPicture = createTable(
   }),
 );
 
-export const groupPictureRelations = relations(groupPicture, ({ many }) => ({
-  post: many(picture),
-}));
+// export const groupPictureRelations = relations(groupPicture, ({ many }) => ({
+//   pictures: many(picture),
+// }));
 
 // TODO: rename
 export const usersToGroupsRelations = relations(groupPicture, ({ one }) => ({
