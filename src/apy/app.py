@@ -1,6 +1,6 @@
-from fastapi import FastAPI, Request, Response
-import json
+import io
 from src.apy.instance import redis_repo
+from fastapi import FastAPI, Request, Response
 
 app = FastAPI()
 
@@ -16,7 +16,9 @@ async def upload(image_url, request: Request):
     
 @app.get("/apy/download")
 async def download(hash, request: Request):
-    return request.app.state.redis_repo.get_image(hash)
+    image_data = request.app.state.redis_repo.get_image(hash)
+    return Response(content=image_data, media_type="image/jpeg")
+
 
 @app.get("/apy/search")
 async def search(search_query, request: Request):

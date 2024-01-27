@@ -14,18 +14,30 @@ class RedisRepository:
 
     def upload_image(self, image_url):
         response = requests.get(image_url)
-        image_data = Image.open(response.content)
+        image_data = io.BytesIO(response.content)
         image_key = hashlib.md5(image_url.encode()).hexdigest()
-        
-        self.redis.hset("key", image_key, image_data)
-        return {"key": image_key, "data": image_data}
+        self.redis.hset("key", image_key, image_data.read())
+        return image_key
 
-    def get_image(self):
-        return self.redis.get("key")
+    def get_image(self, hash):
+        return self.redis.hget("key", f"{hash}")
 
     def vector_search(self, search_query):
-        return self.redis.get("key")
+        hashes = self.redis.hkeys("key")
+        images = []
         text_emb = self.transformer.encode(search_query)
+        for hash in hashes:
+            decoded_hash = hash.decode("utf-8")
+            image_bytes = self.get_image(decoded_hash)
+            image = Image.open(io.BytesIO(image_bytes))
+            images.append(image)
 
-        # cos_scores = util.cos_sim(np.array(image_vectors.values())., text_emb)[0]
-        # return cos_scores
+        image_embs = self.transformer.encode(images)
+
+        scores_disct = {}
+        cos_scores = util.cos_sim(image_embs, text_emb)
+        
+        for i, score in enumerate(cos_scores):
+            scores_disct[hashes[i]] = float(score[0])
+            
+        return scores_disct
