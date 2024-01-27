@@ -1,11 +1,11 @@
 export default async function Page({
-  params: { groupId },
+  params: { taskId },
 }: {
-  params: { groupId: string };
+  params: { taskId: string };
 }) {
   return (
     <>
-      <div>Member - {groupId}</div>
+      <div>Member - {taskId}</div>
       <div></div>
     </>
   );
