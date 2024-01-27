@@ -7,9 +7,9 @@
     "build": "next build",
     "db:push": "drizzle-kit push:pg",
     "db:studio": "drizzle-kit studio",
-    "fastapi-dev": "poetry install --no-root && poetry run uvicorn src.apy.app:app --reload",
-    "next-dev": "next dev",
-    "dev": "concurrently \"npm run next-dev\" \"npm run fastapi-dev\"",
+    "dev:fastapi": "poetry install --no-root && poetry run uvicorn src.apy.app:app --reload",
+    "dev:next": "next dev",
+    "dev": "concurrently \"pnpm run dev:next\" \"pnpm run dev:fastapi\"",
     "lint": "next lint",
     "start": "next start"
   },
