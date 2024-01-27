@@ -2,7 +2,11 @@ import { and, eq } from "drizzle-orm";
 import { generate as generateRandomWords } from "random-words";
 import { z } from "zod";
 
-import { createTRPCRouter, organiserProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  organiserProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import {
   group,
   groupMembership,
