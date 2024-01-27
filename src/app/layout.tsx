@@ -1,11 +1,11 @@
 import "~/styles/globals.css";
 
 import { UserProvider } from "@auth0/nextjs-auth0/client";
-import { Inter } from "next/font/google";
+import { Inter as FontSans } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
-const inter = Inter({
+export const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <UserProvider>
-        <body className={`font-sans ${inter.variable}`}>
+        <body className={`font-sans ${fontSans.variable}`}>
           <TRPCReactProvider>{children}</TRPCReactProvider>
         </body>
       </UserProvider>
