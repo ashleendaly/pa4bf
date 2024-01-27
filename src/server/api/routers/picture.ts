@@ -168,6 +168,24 @@ export const pictureRouter = createTRPCRouter({
       return true;
     }),
 
+  getForUser: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input: { userId } }) => {
+      return ((await ctx.db
+        .select({
+          picture_url: picture.url,
+        })
+        .from(userPicture)
+        .where(eq(userPicture.userId, userId))
+        .innerJoin(picture, eq(picture.id, userPicture.pictureId))) ?? []) as {
+        picture_url: string;
+      }[];
+    }),
+
   //create picture
   //delete picture
   //update caption
