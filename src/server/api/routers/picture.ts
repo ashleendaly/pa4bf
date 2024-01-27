@@ -16,9 +16,10 @@ export const pictureRouter = createTRPCRouter({
         userId: z.string(),
         groupId: z.number().int(),
         caption: z.string(),
+        taskId: z.number().int(),
       }),
     )
-    .mutation(async ({ ctx, input: { userId, groupId, caption } }) => {
+    .mutation(async ({ ctx, input: { userId, groupId, caption, taskId } }) => {
       const [newPicture] = await ctx.db
         .insert(picture)
         .values({ caption })
@@ -26,7 +27,7 @@ export const pictureRouter = createTRPCRouter({
 
       const pictureId = newPicture!.id;
 
-      await ctx.db.insert(userPicture).values({ userId, pictureId });
+      await ctx.db.insert(userPicture).values({ userId, pictureId, taskId });
       await ctx.db.insert(groupPicture).values({ groupId, pictureId });
     }),
 
