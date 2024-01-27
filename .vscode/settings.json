@@ -1,0 +1,8 @@
+{
+  "cSpell.words": ["serwist"],
+  "material-icon-theme.folders.associations": {
+    "apy": "api",
+    "trpc": "config",
+    "ui": "template"
+  }
+}
