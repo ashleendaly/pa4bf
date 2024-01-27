@@ -2,7 +2,13 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { relations } from "drizzle-orm";
-import { pgTableCreator, primaryKey, serial, text } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgTableCreator,
+  primaryKey,
+  serial,
+  text,
+} from "drizzle-orm/pg-core";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -13,20 +19,21 @@ import { pgTableCreator, primaryKey, serial, text } from "drizzle-orm/pg-core";
 export const createTable = pgTableCreator((name) => `pa4bf_${name}`);
 
 export const picture = createTable("picture", {
-  id: text("picture_id").primaryKey(),
+  id: serial("picture_id").primaryKey(),
   metadata: text("metadata"),
 });
 
 export const group = createTable("group", {
   id: serial("group_id").primaryKey(),
-  displayName: text("display_name"),
+  inviteCode: text("invite_code").notNull(),
+  displayName: text("display_name").notNull(),
 });
 
 export const userPicture = createTable(
   "user_picture",
   {
     userId: text("user_id").notNull(),
-    pictureId: text("picture_id")
+    pictureId: integer("picture_id")
       .notNull()
       .references(() => picture.id),
   },
@@ -42,10 +49,10 @@ export const userPictureRelations = relations(userPicture, ({ many }) => ({
 export const groupPicture = createTable(
   "group_picture",
   {
-    groupId: text("group_id")
+    groupId: integer("group_id")
       .notNull()
       .references(() => group.id),
-    pictureId: text("picture_id")
+    pictureId: integer("picture_id")
       .notNull()
       .references(() => picture.id),
   },
@@ -58,6 +65,7 @@ export const groupPictureRelations = relations(groupPicture, ({ many }) => ({
   post: many(picture),
 }));
 
+// TODO: rename
 export const usersToGroupsRelations = relations(groupPicture, ({ one }) => ({
   group: one(group, {
     fields: [groupPicture.groupId],
@@ -72,7 +80,20 @@ export const usersToGroupsRelations = relations(groupPicture, ({ one }) => ({
 export const groupMembership = createTable(
   "group_membership",
   {
-    groupId: text("group_id")
+    groupId: integer("group_id")
+      .notNull()
+      .references(() => group.id),
+    userId: text("user_id").notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.groupId, t.userId] }),
+  }),
+);
+
+export const groupOwnership = createTable(
+  "group_ownership",
+  {
+    groupId: integer("group_id")
       .notNull()
       .references(() => group.id),
     userId: text("user_id").notNull(),
