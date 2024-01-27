@@ -3,6 +3,7 @@ import { getUserId } from "~/components/auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { api } from "~/trpc/server";
 import { AdminTab } from "./admin-tab";
+import { MembersTab } from "./members-tab";
 
 export default async function Page({
   params: { groupId },
@@ -50,9 +51,6 @@ export default async function Page({
   );
 }
 
-function MembersTab() {
-  return <>members</>;
-}
 function TasksTab() {
   return <>tasks</>;
 }
