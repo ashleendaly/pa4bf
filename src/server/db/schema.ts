@@ -25,6 +25,7 @@ export const picture = createTable("picture", {
 
 export const group = createTable("group", {
   id: serial("group_id").primaryKey(),
+  inviteCode: text("invite_code").notNull(),
   displayName: text("display_name").notNull(),
 });
 
@@ -64,6 +65,7 @@ export const groupPictureRelations = relations(groupPicture, ({ many }) => ({
   post: many(picture),
 }));
 
+// TODO: rename
 export const usersToGroupsRelations = relations(groupPicture, ({ one }) => ({
   group: one(group, {
     fields: [groupPicture.groupId],
