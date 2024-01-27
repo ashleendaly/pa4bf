@@ -8,6 +8,7 @@ import { Header } from "~/components/header";
 import { ThemeProvider } from "~/components/theme-provider";
 import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "~/lib/utils";
+import { Toaster } from "~/components/ui/sonner";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -76,6 +77,7 @@ export default function RootLayout({
               <main className="min-h-[90dvh] w-full bg-gradient-to-b from-[#2e026d] to-[#15162c]">
                 {children}
               </main>
+              <Toaster />
             </ThemeProvider>
           </TRPCReactProvider>
         </body>
