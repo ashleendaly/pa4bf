@@ -48,7 +48,7 @@ export const userRouter = createTRPCRouter({
             groupId: z.number().int()
         })
     )
-    .mutation(async ({ ctx, input: { userId, groupId } }) =>{
+    .query(async ({ ctx, input: { userId, groupId } }) =>{
         const isMember = await ctx.db.select().from(groupMembership).where(and(eq(groupMembership.userId, userId), eq(groupMembership.groupId, groupId)))
         if(isMember.length === 0){
             return false

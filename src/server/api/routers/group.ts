@@ -73,10 +73,28 @@ export const groupRouter = createTRPCRouter({
         return
       }
       await ctx.db.update(group).set({inviteCode: newCode}).where(eq(group.id, groupId))
+    }),
+
+  kick: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        toBeKickedId: z.string(),
+        groupId: z.number().int()
+      })
+    )
+    .mutation(async ({ ctx, input: { userId, toBeKickedId, groupId } }) =>{
+      const isOwner = await ctx.db.select().from(groupOwnership).where(and(eq(groupOwnership.userId, userId), eq(groupOwnership.groupId, groupId)))
+      if(isOwner.length === 0){
+        return
+      }
+      await ctx.db.delete(groupOwnership).where(and(eq(groupOwnership.userId, toBeKickedId), eq(groupOwnership.groupId, groupId)))
+      await ctx.db.delete(groupMembership).where(and(eq(groupMembership.userId, toBeKickedId), eq(groupOwnership.groupId, groupId)))
     })
 
     //create group
     //delete group
     //rename group
     //remake group code
+    //kick member from group
 });
