@@ -4,7 +4,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { groupOwnership, groupPicture, picture, userPicture } from "~/server/db/schema";
 
-export const userRouter = createTRPCRouter({
+export const pictureRouter = createTRPCRouter({
   upload: publicProcedure
     .input(
         z.object({
