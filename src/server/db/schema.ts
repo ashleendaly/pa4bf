@@ -8,6 +8,10 @@ import {
   primaryKey,
   serial,
   text,
+  time,
+  boolean,
+  date,
+  timestamp,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -102,3 +106,15 @@ export const groupOwnership = createTable(
     pk: primaryKey({ columns: [t.groupId, t.userId] }),
   }),
 );
+
+export const task = createTable("task", {
+  id: serial("id").primaryKey(),
+  groupId: integer("group_id")
+    .notNull()
+    .references(() => group.id),
+  startTime: timestamp("start_time").notNull(),
+  duration: integer("duration").notNull(),
+  description: text("description").notNull(),
+  points: integer("points").notNull(),
+  aiJudge: boolean("ai_judge"),
+});

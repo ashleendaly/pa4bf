@@ -12,6 +12,7 @@ import {
   groupMembership,
   groupOwnership,
   groupPicture,
+  task,
 } from "~/server/db/schema";
 
 export const groupRouter = createTRPCRouter({
@@ -175,6 +176,33 @@ export const groupRouter = createTRPCRouter({
       },
     ),
 
+  makeTask: publicProcedure
+    .input(
+      z.object({
+        groupId: z.number().int(),
+        startTime: z.coerce.date(),
+        duration: z.number().int(),
+        description: z.string(),
+        points: z.number().int(),
+        aiJudge: z.boolean(),
+      }),
+    )
+    .mutation(
+      async ({
+        ctx,
+        input: { groupId, startTime, duration, description, points, aiJudge },
+      }) => {
+        return await ctx.db.insert(task).values({
+          startTime: startTime,
+          groupId: groupId,
+          duration: duration,
+          description: description,
+          points: points,
+          aiJudge: aiJudge,
+        });
+      },
+    ),
+
   //create group
   //delete group
   //rename group
@@ -182,4 +210,5 @@ export const groupRouter = createTRPCRouter({
   //kick member from group
   //make member owner of group
   //remove ownership of member from group
+  //create task
 });
