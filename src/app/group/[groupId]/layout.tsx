@@ -1,6 +1,8 @@
 import { getSession } from "@auth0/nextjs-auth0";
 import { type ReactNode } from "react";
 import { z } from "zod";
+import { getUserId } from "~/components/auth";
+import { PageWrapper } from "~/components/page-wrapper";
 import { api } from "~/trpc/server";
 
 interface pageProps {
@@ -15,20 +17,12 @@ export default async function Layout({
   member,
   params: { groupId },
 }: pageProps) {
-  const session = await getSession();
-  if (!session) return <>not authorized</>;
-  const userId = session.user.sid as string;
+  const userId = await getUserId();
+
+  // TODO make this not shit
+  if (!userId) return;
 
   const gid = z.coerce.number().int().parse(groupId);
-
-  const [groupData] = await api.group.details.query({
-    userId,
-    groupId: gid,
-  });
-
-  if (!groupData) return <div>group does not exist</div>;
-
-  const { displayName, inviteCode } = groupData;
 
   const isMember = await api.group.isMember.query({
     groupId: gid,
@@ -42,12 +36,5 @@ export default async function Layout({
     organiserId: userId,
   });
 
-  return (
-    <div>
-      <div>
-        groupId - [{displayName}, {inviteCode}]
-      </div>
-      {isOrganiser ? organiser : member}
-    </div>
-  );
+  return <PageWrapper>{isOrganiser ? organiser : member}</PageWrapper>;
 }

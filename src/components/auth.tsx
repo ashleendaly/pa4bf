@@ -13,3 +13,9 @@ export async function AuthButton() {
   const Auth = session ? Logout : Login;
   return <Auth />;
 }
+
+export async function getUserId() {
+  const session = await getSession();
+  if (!session) return undefined;
+  return session.user.email as string | undefined;
+}

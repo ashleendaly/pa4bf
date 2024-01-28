@@ -1,17 +1,21 @@
-import { getSession } from "@auth0/nextjs-auth0";
 import { z } from "zod";
+import { getUserId } from "~/components/auth";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { api } from "~/trpc/server";
-import { QrCode } from "../qr-code";
+import { AdminTab } from "./admin-tab";
+
+import { MembersTab } from "./members-tab";
+import { TasksTab } from "./tasks-tab";
 
 export default async function Page({
   params: { groupId },
 }: {
   params: { groupId: string };
 }) {
-  const session = await getSession();
-  if (!session) return <>not authorized</>;
-  const userId = session.user.sid as string;
   const gid = z.coerce.number().int().parse(groupId);
+
+  const userId = await getUserId();
+  if (!userId) return;
 
   const [groupData] = await api.group.details.query({
     userId,
@@ -24,11 +28,31 @@ export default async function Page({
 
   return (
     <div>
-      <div>
-        groupId - [{displayName}, {inviteCode}]
-      </div>
-      <QrCode code={inviteCode} />
-      {userId}
+      <h1>{displayName}</h1>
+      <Tabs defaultValue="admin" className="w-[400px]">
+        <TabsList>
+          <TabsTrigger value="admin">Admin</TabsTrigger>
+          <TabsTrigger value="members">Members</TabsTrigger>
+          <TabsTrigger value="tasks">Tasks</TabsTrigger>
+          <TabsTrigger value="pictures">Pictures</TabsTrigger>
+        </TabsList>
+        <TabsContent value="admin">
+          <AdminTab inviteCode={inviteCode} />
+        </TabsContent>
+        <TabsContent value="members">
+          <MembersTab />
+        </TabsContent>
+        <TabsContent value="tasks">
+          <TasksTab />
+        </TabsContent>
+        <TabsContent value="pictures">
+          <PicturesTab />
+        </TabsContent>
+      </Tabs>
     </div>
   );
+}
+
+function PicturesTab() {
+  return <>pics</>;
 }

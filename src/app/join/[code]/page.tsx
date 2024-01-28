@@ -12,7 +12,7 @@ export default async function JoinClub({
 
   if (!session) return <>you must be logged in</>;
 
-  const id = z.string().parse(session.user.sid);
+  const id = z.string().parse(session.user.email);
 
   return (
     <div className="grid h-[80dvh] place-items-center">
