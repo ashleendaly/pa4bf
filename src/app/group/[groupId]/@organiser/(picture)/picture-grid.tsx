@@ -1,7 +1,8 @@
 import Image from "next/image";
+import { api } from "~/trpc/server";
 
-export function PictureGrid() {
-  const arr = Array.from(Array(10));
+export async function PictureGrid({ groupId }: { groupId: number }) {
+  const arr = await api.picture.getForGroup.query({ groupId });
 
   return (
     <div className="grid grid-cols-4 gap-4">

@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { PageWrapper } from "~/components/page-wrapper";
 import { api } from "~/trpc/server";
+import Link from "next/link";
 
 export default async function Page({
   params: { groupId },
@@ -15,6 +16,7 @@ export default async function Page({
 
   return (
     <PageWrapper className="grid h-[90dvh] place-items-center">
+      <Link href={"./tasks"}>Tasks</Link>
       <div>
         {!!images.length && (
           <>

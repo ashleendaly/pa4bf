@@ -199,12 +199,14 @@ export const pictureRouter = createTRPCRouter({
     .query(async ({ ctx, input: { groupId } }) => {
       return ((await ctx.db
         .select({
+          id: picture.id,
           picture_url: picture.url,
         })
         .from(groupPicture)
         .where(eq(groupPicture.groupId, groupId))
         .innerJoin(picture, eq(picture.id, groupPicture.pictureId))) ?? []) as {
         picture_url: string;
+        id: number;
       }[];
     }),
 
