@@ -2,17 +2,13 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { type InferSelectModel, relations } from "drizzle-orm";
-import { type InferSelectModel, relations } from "drizzle-orm";
 import {
-  boolean,
   integer,
   pgTableCreator,
   primaryKey,
   serial,
   text,
-  time,
   boolean,
-  date,
   timestamp,
 } from "drizzle-orm/pg-core";
 
@@ -138,7 +134,5 @@ export const task = createTable("task", {
   points: integer("points").notNull(),
   aiJudge: boolean("ai_judge"),
 });
-
-export type Task = InferSelectModel<typeof task>;
 
 export type Task = InferSelectModel<typeof task>;
