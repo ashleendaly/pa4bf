@@ -7,6 +7,7 @@ import { api } from "~/trpc/server";
 import { AdminTab } from "./(admin)/admin-tab";
 import { MembersTab } from "./(members)/members-tab";
 import { TasksTab } from "./(tasks)/tasks-tab";
+import { PictureGrid } from "./(picture)/picture-grid";
 
 export default async function Page({
   params: { groupId },
@@ -43,7 +44,11 @@ export default async function Page({
           </TabsTrigger>
         </TabsList>
         <TabsContent value="admin">
-          <AdminTab displayName={displayName} inviteCode={inviteCode} />
+          <AdminTab
+            userId={userId}
+            displayName={displayName}
+            inviteCode={inviteCode}
+          />
         </TabsContent>
         <TabsContent value="members">
           <MembersTab />
@@ -52,13 +57,9 @@ export default async function Page({
           <TasksTab />
         </TabsContent>
         <TabsContent value="pictures">
-          <PicturesTab />
+          <PictureGrid />
         </TabsContent>
       </Tabs>
     </PageWrapper>
   );
-}
-
-function PicturesTab() {
-  return <>pics</>;
 }

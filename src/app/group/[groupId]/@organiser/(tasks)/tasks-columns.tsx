@@ -66,15 +66,25 @@ export const columns: ColumnDef<Task>[] = [
     }) => (aiJudge ? <Check /> : <X />),
   },
   {
+    id: "onOff",
+    accessorKey: "onOff",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
+    cell: ({
+      row: {
+        original: { onOff },
+      },
+    }) => {
+      return <Button>{!onOff ? "Start" : "Stop"}</Button>;
+    },
+  },
+  {
     id: "actions",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Actions" />
     ),
-    cell: ({
-      row: {
-        original: { id },
-      },
-    }) => {
+    cell: () => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -87,11 +97,7 @@ export const columns: ColumnDef<Task>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Button className="w-full" variant="outline">
-                {id ? "Make Organiser" : "Make Member"}
-              </Button>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
+              {/* // TODO: hook up procedure */}
               <Button
                 className="flex w-full gap-2"
                 variant="destructive"
