@@ -39,9 +39,6 @@ export const userPicture = createTable(
     pictureId: integer("picture_id")
       .notNull()
       .references(() => picture.id),
-    taskId: integer("task_id")
-      .notNull()
-      .references(() => task.id),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.userId, t.pictureId] }),
@@ -49,7 +46,7 @@ export const userPicture = createTable(
 );
 
 export const taskPicture = createTable(
-  "user_picture",
+  "task_picture",
   {
     pictureId: integer("picture_id")
       .notNull()

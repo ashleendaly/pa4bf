@@ -6,6 +6,7 @@ import {
   groupOwnership,
   groupPicture,
   picture,
+  taskPicture,
   userPicture,
 } from "~/server/db/schema";
 
@@ -29,8 +30,9 @@ export const pictureRouter = createTRPCRouter({
 
         const pictureId = newPicture!.id;
 
-        await ctx.db.insert(userPicture).values({ userId, pictureId, taskId });
+        await ctx.db.insert(userPicture).values({ userId, pictureId });
         await ctx.db.insert(groupPicture).values({ groupId, pictureId });
+        await ctx.db.insert(taskPicture).values({ taskId, pictureId });
 
         return pictureId;
       },
