@@ -59,7 +59,11 @@ export const columns: ColumnDef<Task>[] = [
   {
     id: "ai",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="AI Judge" />
+      <DataTableColumnHeader
+        column={column}
+        className="text-foreground"
+        title="AI Judge"
+      />
     ),
     cell: ({
       row: {
@@ -105,7 +109,11 @@ export const columns: ColumnDef<Task>[] = [
   {
     id: "actions",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Actions" />
+      <DataTableColumnHeader
+        className="text-foreground"
+        column={column}
+        title="Actions"
+      />
     ),
     cell: ({
       row: {
