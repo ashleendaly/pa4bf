@@ -2,10 +2,10 @@ import { z } from "zod";
 
 import { PageWrapper } from "~/components/page-wrapper";
 import { api } from "~/trpc/server";
-import { PictureGrid } from "../@organiser/(picture)/picture-grid";
 import { getUserId } from "~/components/auth";
 import { Button } from "~/components/ui/button";
 import Link from "next/link";
+import { PictureGrid } from "~/components/picture-grid";
 
 export default async function Page({
   params: { groupId },
@@ -34,7 +34,7 @@ export default async function Page({
       )}
       <div>
         {images.length !== 0 ? (
-          <PictureGrid images={images} />
+          <PictureGrid data={images} />
         ) : (
           <div>You don&apos;t have any pictures yet</div>
         )}
