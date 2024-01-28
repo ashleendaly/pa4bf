@@ -25,6 +25,10 @@ export default async function Page({
 
   const { displayName, inviteCode } = groupData[0];
 
+  const membersData = await api.group.admin.getAllUsers.query({ groupId: gid });
+
+  const taskData = await api.task.viewAllTasks.query({ groupId: gid });
+
   return (
     <PageWrapper className="pt-16">
       <h1 className="mb-6 ml-3 text-5xl">{displayName}</h1>
@@ -51,10 +55,10 @@ export default async function Page({
           />
         </TabsContent>
         <TabsContent value="members">
-          <MembersTab />
+          <MembersTab membersData={membersData} />
         </TabsContent>
         <TabsContent value="tasks">
-          <TasksTab />
+          <TasksTab taskData={taskData} />
         </TabsContent>
         <TabsContent value="pictures">
           <PictureGrid />
