@@ -37,7 +37,12 @@ export function DataTableColumnHeader<TData, TValue>({
   }
 
   return (
-    <div className={cn("flex h-full items-center space-x-2 py-1", className)}>
+    <div
+      className={cn(
+        "flex h-full items-center space-x-2 py-1 text-foreground",
+        className,
+      )}
+    >
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

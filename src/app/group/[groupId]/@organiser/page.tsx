@@ -63,7 +63,9 @@ export default async function Page({
           <TasksTab taskData={taskData} />
         </TabsContent>
         <TabsContent value="pictures">
-          <PictureGrid data={pictures} />
+          <div className="mt-16">
+            <PictureGrid data={pictures} />
+          </div>
         </TabsContent>
       </Tabs>
     </PageWrapper>
