@@ -36,7 +36,7 @@ export default async function Page({
         <h2 className="text-3xl underline decoration-violet-400 underline-offset-2">
           Your current task!
         </h2>
-        <div className="text-lg">{"currentTask.description"}</div>
+        <div className="text-lg">{currentTask.description}</div>
         <Separator className="my-7" />
         <UploadButton groupId={gid} taskId={currentTask.id} userId={userId} />
       </div>

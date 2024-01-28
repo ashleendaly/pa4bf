@@ -1,5 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
+import { env } from "~/env";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import {
@@ -21,9 +22,20 @@ export const pictureRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input: { userId, groupId, taskId, url } }) => {
+      console.log(url, taskId);
+      const res = await fetch(`http://${env.HOSTNAME}/apy/upload`, {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({ image_url: url, group_id: groupId }),
+      });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const bs = await res.json();
+      const result = z.string().safeParse(bs);
+      if (!result.success) return;
+      const hash = result.data;
       const [newPicture] = await ctx.db
         .insert(picture)
-        .values({ url })
+        .values({ redis_hash: hash, url })
         .returning();
 
       const pictureId = newPicture!.id;
@@ -31,7 +43,6 @@ export const pictureRouter = createTRPCRouter({
       await ctx.db.insert(userPicture).values({ userId, pictureId });
       await ctx.db.insert(groupPicture).values({ groupId, pictureId });
       await ctx.db.insert(taskPicture).values({ taskId, pictureId });
-
       return pictureId;
     }),
 

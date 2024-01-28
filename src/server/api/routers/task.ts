@@ -40,6 +40,14 @@ export const taskRouter = createTRPCRouter({
       const hasCompleted = await ctx.db
         .select()
         .from(userPicture)
+        .innerJoin(
+          groupPicture,
+          eq(groupPicture.pictureId, userPicture.pictureId),
+        )
+        .innerJoin(
+          taskPicture,
+          eq(taskPicture.pictureId, userPicture.pictureId),
+        )
         .where(
           and(
             eq(userPicture.userId, userId),
