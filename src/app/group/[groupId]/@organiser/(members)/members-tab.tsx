@@ -4,5 +4,9 @@ import { columns } from "./member-columns";
 import { data } from "./members_data";
 
 export function MembersTab() {
-  return <DataTable columns={columns} data={data} />;
+  return (
+    <div className="mt-10">
+      <DataTable columns={columns} data={data} />
+    </div>
+  );
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import { type ColumnDef } from "@tanstack/react-table";
+import { LucideMoreHorizontal } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import { type Member } from "./members_data";
 import { DataTableColumnHeader } from "~/components/ui/data-table-header";
 import {
   DropdownMenu,
@@ -12,9 +12,29 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { LucideMoreHorizontal, Trash2 } from "lucide-react";
+import { type Member } from "./members_data";
+import { Checkbox } from "~/components/ui/checkbox";
 
 export const columns: ColumnDef<Member>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "displayName",
     header: ({ column }) => (
@@ -22,11 +42,21 @@ export const columns: ColumnDef<Member>[] = [
     ),
   },
   {
+    accessorKey: "email",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Email" />
+    ),
+  },
+  {
     id: "actions",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Actions" />
     ),
-    cell: ({ row }) => {
+    cell: ({
+      row: {
+        original: { userId },
+      },
+    }) => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -40,12 +70,13 @@ export const columns: ColumnDef<Member>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Button variant="outline">
-                {/* // TODO: check user level */}
-                {row.original.userId ? "Make Organiser" : "Make Member"}
+                {userId ? "Make Organiser" : "Make Member"}
               </Button>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Button variant="outline">Kick User</Button>
+              <Button className="w-full" variant="destructive">
+                Kick User
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
