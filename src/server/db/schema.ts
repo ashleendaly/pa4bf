@@ -24,6 +24,7 @@ export const picture = createTable("picture", {
   redis_hash: text("hash"),
   caption: text("caption"),
   url: text("url"),
+  winner: boolean("winner"),
 });
 
 export const group = createTable("group", {

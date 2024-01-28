@@ -14,6 +14,7 @@ import {
   groupMembership,
   groupOwnership,
   groupPicture,
+  picture,
   task,
 } from "~/server/db/schema";
 
@@ -98,6 +99,20 @@ export const groupAdminRouter = createTRPCRouter({
       });
     },
   ),
+
+  setWinner: organiserProcedure
+    .input(
+      z.object({
+        hash: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { hash } }) => {
+      await ctx.db
+        .update(picture)
+        .set({ winner: true })
+        .where(eq(picture.redis_hash, hash));
+    }),
+
   kick: organiserProcedure
     .input(
       z.object({
