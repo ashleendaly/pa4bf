@@ -3,6 +3,7 @@ import { DeleteGroupButton } from "./delete-group-button";
 import { GroupNameForm } from "./group-name-form";
 import { RotateInviteCode } from "./rotate-invite-code";
 import { getUserId } from "~/components/auth";
+import { NewTaskForm } from "./new-task-form";
 
 export async function AdminTab({
   groupId,
@@ -18,9 +19,9 @@ export async function AdminTab({
   return (
     <div className="mt-10">
       <GroupNameForm
-        groupId={groupId}
         organiserId={organiserId}
         currentDisplayName={displayName}
+        groupId={groupId}
       />
       <Separator className="my-12" />
       <RotateInviteCode
@@ -30,6 +31,8 @@ export async function AdminTab({
       />
       <Separator className="my-12" />
       <DeleteGroupButton groupId={groupId} organiserId={organiserId} />
+      <Separator />
+      <NewTaskForm groupId={groupId} />
     </div>
   );
 }
