@@ -80,11 +80,9 @@ export function NewTaskForm({ groupId }: { groupId: number }) {
             <FormItem>
               <FormLabel>Points</FormLabel>
               <FormControl>
-                <Input placeholder="My Group" {...field} />
+                <Input placeholder="5" {...field} />
               </FormControl>
-              <FormDescription>
-                How many points should be awarded for this task
-              </FormDescription>
+              <FormDescription>Point amount</FormDescription>
               <FormMessage />
             </FormItem>
           )}
