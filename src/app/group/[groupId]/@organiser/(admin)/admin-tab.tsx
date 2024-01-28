@@ -46,7 +46,7 @@ export async function AdminTab({
       <h2 className="mb-3 text-2xl underline decoration-violet-400 underline-offset-4">
         Ask the AI Gods for the winner
       </h2>
-      <ResultsButton />
+      <ResultsButton groupId={groupId} organiserId={organiserId} />
       <Separator className="my-12" />
       <h2 className="mb-3 text-2xl underline decoration-red-400 underline-offset-4">
         Danger Zone
