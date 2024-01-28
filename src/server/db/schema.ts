@@ -9,7 +9,6 @@ import {
   serial,
   text,
   boolean,
-  timestamp,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -22,6 +21,7 @@ export const createTable = pgTableCreator((name) => `pa4bf_${name}`);
 
 export const picture = createTable("picture", {
   id: serial("picture_id").primaryKey(),
+  redis_hash: text("hash"),
   caption: text("caption"),
   url: text("url"),
 });
@@ -126,10 +126,7 @@ export const task = createTable("task", {
   groupId: integer("group_id")
     .notNull()
     .references(() => group.id),
-  startTime: timestamp("start_time").notNull(),
-  duration: integer("duration").notNull(),
-  //not sure i think this is hte best way to do this;
-  // way easier to have an 'open'
+  onOff: boolean("on_off").notNull(),
   description: text("description").notNull(),
   points: integer("points").notNull(),
   aiJudge: boolean("ai_judge"),

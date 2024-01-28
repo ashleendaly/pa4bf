@@ -24,10 +24,7 @@ export const taskRouter = createTRPCRouter({
         .where(eq(task.groupId, groupId));
 
       return tasks.find((task: Task) => {
-        const now = new Date();
-        const startTime = new Date(task.startTime);
-        const endTime = new Date(startTime.getTime() + task.duration * 60000);
-        return startTime <= now && endTime >= now;
+        return task.onOff == true;
       });
     }),
 
