@@ -24,7 +24,7 @@ export function PictureGrid({ data }: { data: Picture[] }) {
   });
 
   return (
-    <div className="grid w-full grid-cols-6 gap-10">
+    <div className="grid w-full grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
       {table.getRowModel().rows?.length ? (
         table
           .getRowModel()

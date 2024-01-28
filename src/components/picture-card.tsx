@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Card, CardContent, CardFooter } from "./ui/card";
 import { cn } from "~/lib/utils";
 import { Separator } from "./ui/separator";
 
