@@ -19,12 +19,14 @@ export default async function Home() {
   }); //await api.picture.getForUser.query({ userId });
 
   return (
-    <PageWrapper className="grid h-[90dvh] place-items-center">
+    <PageWrapper className="grid h-[90dvh] w-full max-w-7xl place-items-center">
       {userId ? (
         <div>
           {!!images.length && (
             <>
-              <div>Your Photos</div>
+              <h1 className="mb-14 text-4xl underline decoration-violet-400 underline-offset-2">
+                Your Photos
+              </h1>
               <PictureGrid data={images} />
             </>
           )}

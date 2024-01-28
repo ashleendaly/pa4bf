@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { cn } from "~/lib/utils";
+import { Separator } from "./ui/separator";
 
 export function PictureCard({
   picture: { caption, url, id },
@@ -10,13 +11,20 @@ export function PictureCard({
   selected: boolean;
 }) {
   return (
-    <Card className={cn(selected && "scale-105")}>
-      <CardContent>
-        <Image src={url} width={100} height={100} alt={caption} />
-      </CardContent>
-      <CardFooter>
+    <div className={cn("", selected && "scale-105")}>
+      <div className="pt-4.5">
+        <Image
+          src={url}
+          width={100}
+          height={100}
+          alt={caption}
+          className="w-full rounded-sm"
+        />
+      </div>
+      <div className="flex flex-col items-center gap-2">
+        <Separator className="w-3/4" />
         <p>{caption}</p>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }
