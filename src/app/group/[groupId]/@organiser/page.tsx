@@ -7,7 +7,7 @@ import { api } from "~/trpc/server";
 import { AdminTab } from "./(admin)/admin-tab";
 import { MembersTab } from "./(members)/members-tab";
 import { TasksTab } from "./(tasks)/tasks-tab";
-import { PictureGrid } from "./(picture)/picture-grid";
+import { PictureGrid } from "~/components/picture-grid";
 
 export default async function Page({
   params: { groupId },
@@ -63,7 +63,7 @@ export default async function Page({
           <TasksTab taskData={taskData} />
         </TabsContent>
         <TabsContent value="pictures">
-          <PictureGrid images={pictures} />
+          <PictureGrid data={pictures} />
         </TabsContent>
       </Tabs>
     </PageWrapper>
