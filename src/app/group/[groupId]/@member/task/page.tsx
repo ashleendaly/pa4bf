@@ -20,19 +20,7 @@ export default async function Page({
     userId,
   });
 
-  if (!currentTask)
-    return (
-      <PageWrapper className="grid place-items-center">
-        <div className="flex flex-col items-center gap-4">
-          <h2 className="text-3xl underline decoration-violet-400 underline-offset-2">
-            Your current task!
-          </h2>
-          <div className="text-lg">{"currentTask.description"}</div>
-          <Separator className="my-7" />
-          <UploadButton />
-        </div>
-      </PageWrapper>
-    );
+  if (!currentTask) return <CaughtUp />;
 
   const hasCompletedTask = await api.task.hasCompletedTask.query({
     groupId: gid,
@@ -43,11 +31,15 @@ export default async function Page({
   if (hasCompletedTask) return <CaughtUp />;
 
   return (
-    <PageWrapper className="grid place-items-center text-2xl">
-      <h2>Your current task!</h2>
-      <div>{currentTask.description}</div>
-      <Separator />
-      <UploadButton />
+    <PageWrapper className="grid place-items-center">
+      <div className="flex flex-col items-center gap-4">
+        <h2 className="text-3xl underline decoration-violet-400 underline-offset-2">
+          Your current task!
+        </h2>
+        <div className="text-lg">{"currentTask.description"}</div>
+        <Separator className="my-7" />
+        <UploadButton groupId={gid} taskId={currentTask.id} userId={userId} />
+      </div>
     </PageWrapper>
   );
 }
