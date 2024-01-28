@@ -27,6 +27,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
+    NEXT_PUBLIC_BEAMS_INSTANCE_ID: z.string(),
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
 
@@ -38,6 +39,7 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     HOSTNAME: process.env.HOSTNAME,
+    NEXT_PUBLIC_BEAMS_INSTANCE_ID: process.env.NEXT_PUBLIC_BEAMS_INSTANCE_ID,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
