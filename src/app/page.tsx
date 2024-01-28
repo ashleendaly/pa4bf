@@ -17,7 +17,7 @@ export default async function Home() {
     <PageWrapper className="grid h-[90dvh] place-items-center">
       {userId ? (
         <div>
-          {images.length && (
+          {!!images.length && (
             <>
               <div>Your Photos</div>
               {images.map((e, i) => (
