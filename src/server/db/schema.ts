@@ -8,9 +8,7 @@ import {
   primaryKey,
   serial,
   text,
-  time,
   boolean,
-  date,
   timestamp,
 } from "drizzle-orm/pg-core";
 
@@ -47,6 +45,21 @@ export const userPicture = createTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.userId, t.pictureId] }),
+  }),
+);
+
+export const taskPicture = createTable(
+  "user_picture",
+  {
+    pictureId: integer("picture_id")
+      .notNull()
+      .references(() => picture.id),
+    taskId: integer("task_id")
+      .notNull()
+      .references(() => task.id),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.taskId, t.pictureId] }),
   }),
 );
 

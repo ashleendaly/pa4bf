@@ -15,21 +15,26 @@ export const pictureRouter = createTRPCRouter({
       z.object({
         userId: z.string(),
         groupId: z.number().int(),
+        url: z.string().url(),
         caption: z.string(),
         taskId: z.number().int(),
       }),
     )
-    .mutation(async ({ ctx, input: { userId, groupId, caption, taskId } }) => {
-      const [newPicture] = await ctx.db
-        .insert(picture)
-        .values({ caption })
-        .returning();
+    .mutation(
+      async ({ ctx, input: { userId, groupId, caption, taskId, url } }) => {
+        const [newPicture] = await ctx.db
+          .insert(picture)
+          .values({ caption, url })
+          .returning();
 
-      const pictureId = newPicture!.id;
+        const pictureId = newPicture!.id;
 
-      await ctx.db.insert(userPicture).values({ userId, pictureId, taskId });
-      await ctx.db.insert(groupPicture).values({ groupId, pictureId });
-    }),
+        await ctx.db.insert(userPicture).values({ userId, pictureId, taskId });
+        await ctx.db.insert(groupPicture).values({ groupId, pictureId });
+
+        return pictureId;
+      },
+    ),
 
   delete: publicProcedure
     .input(

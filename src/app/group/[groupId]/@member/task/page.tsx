@@ -19,7 +19,21 @@ export default async function Page({
     userId,
   });
 
-  if (currentTask.length == 0)
+  if (!currentTask)
+    return (
+      <div className="grid place-items-center text-2xl">
+        Looks like you&apos;re all caught up! 🎉 Take a moment to relax and
+        enjoy your free time.
+      </div>
+    );
+
+  const hasCompletedTask = await api.task.hasCompletedTask.query({
+    groupId: gid,
+    userId,
+    taskId: currentTask.id,
+  });
+
+  if (hasCompletedTask)
     return (
       <div className="grid place-items-center text-2xl">
         Looks like you&apos;re all caught up! 🎉 Take a moment to relax and
@@ -29,7 +43,7 @@ export default async function Page({
 
   return (
     <>
-      <div>{currentTask[0]?.description}</div>
+      <div>{currentTask.description}</div>
       <UploadButton />
     </>
   );
