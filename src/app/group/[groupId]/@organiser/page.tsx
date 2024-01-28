@@ -8,6 +8,7 @@ import { AdminTab } from "./(admin)/admin-tab";
 import { MembersTab } from "./(members)/members-tab";
 import { TasksTab } from "./(tasks)/tasks-tab";
 import { PictureGrid } from "~/components/picture-grid";
+import { QrCode } from "../qr-code";
 
 export default async function Page({
   params: { groupId },
@@ -33,7 +34,10 @@ export default async function Page({
 
   return (
     <PageWrapper className="pt-16">
-      <h1 className="mb-6 ml-3 text-5xl">{displayName}</h1>
+      <div className="flex w-full items-end justify-between">
+        <h1 className="mb-6 ml-3 text-5xl">{displayName}</h1>
+        <QrCode code={inviteCode} />
+      </div>
       <Tabs defaultValue="admin" className="w-full">
         <TabsList className="w-full">
           <TabsTrigger className="w-full" value="admin">
