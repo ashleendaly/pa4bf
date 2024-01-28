@@ -2,21 +2,37 @@ import { Separator } from "~/components/ui/separator";
 import { DeleteGroupButton } from "./delete-group-button";
 import { GroupNameForm } from "./group-name-form";
 import { RotateInviteCode } from "./rotate-invite-code";
+import { getUserId } from "~/components/auth";
+import { NewTaskForm } from "./new-task-form";
 
 export async function AdminTab({
+  groupId,
   displayName,
   inviteCode,
 }: {
+  groupId: number;
   displayName: string;
   inviteCode: string;
 }) {
+  const organiserId = (await getUserId())!;
+
   return (
     <div className="mt-10">
-      <GroupNameForm userId={""} currentDisplayName={displayName} />
+      <GroupNameForm
+        organiserId={organiserId}
+        currentDisplayName={displayName}
+        groupId={groupId}
+      />
       <Separator className="my-12" />
-      <RotateInviteCode inviteCode={inviteCode} />
+      <RotateInviteCode
+        groupId={groupId}
+        organiserId={organiserId}
+        inviteCode={inviteCode}
+      />
       <Separator className="my-12" />
-      <DeleteGroupButton />
+      <DeleteGroupButton groupId={groupId} organiserId={organiserId} />
+      <Separator />
+      <NewTaskForm groupId={groupId} />
     </div>
   );
 }

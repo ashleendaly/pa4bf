@@ -3,8 +3,19 @@ import { UploadButton as UploadThingButton } from "~/lib/uploadthing";
 import { Button } from "./ui/button";
 import { Upload } from "lucide-react";
 import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
+import { toast } from "sonner";
 
-export function UploadButton() {
+export function UploadButton({
+  groupId,
+  taskId,
+  userId,
+}: {
+  groupId: number;
+  taskId: number;
+  userId: string;
+}) {
+  const { mutateAsync: uploadAsync } = api.picture.upload.useMutation();
   return (
     <Button className="grid h-max place-items-center">
       <UploadThingButton
@@ -29,13 +40,22 @@ export function UploadButton() {
           },
         }}
         onClientUploadComplete={(res) => {
-          // Do something with the response
           console.log("Files: ", res);
-          alert("Upload Completed");
+          res.map((f) =>
+            toast.promise(
+              uploadAsync({ groupId, taskId, caption: "", url: f.url, userId }),
+              {
+                loading: "Loading...",
+                success: "photo uploaded!",
+                error: "Something went wrong...",
+              },
+            ),
+          );
+          return;
         }}
         onUploadError={(error: Error) => {
-          // Do something with the error.
-          alert(`ERROR! ${error.message}`);
+          console.error(`ERROR! ${error.message}`);
+          toast.error("Error uploading photo!");
         }}
       />
     </Button>

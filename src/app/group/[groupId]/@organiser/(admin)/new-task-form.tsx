@@ -19,35 +19,31 @@ import { Input } from "~/components/ui/input";
 import { api } from "~/trpc/react";
 
 const formSchema = z.object({
-  displayName: z.string().min(2, {
+  description: z.string().min(2, {
     message: "Username must be at least 2 characters.",
+  }),
+  points: z.number().min(1, {
+    message: "Add a number larger than 0.",
   }),
 });
 
-export function GroupNameForm({
-  organiserId,
-  currentDisplayName,
-  groupId,
-}: {
-  organiserId: string;
-  currentDisplayName: string;
-  groupId: number;
-}) {
-  const { mutateAsync: updateGroupAsync } =
-    api.group.admin.update.useMutation();
+export function NewTaskForm({ groupId }: { groupId: number }) {
+  const { mutateAsync: createTaskAsync } =
+    api.group.admin.makeTask.useMutation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      displayName: currentDisplayName,
+      description: "",
     },
   });
 
-  function onSubmit({ displayName }: z.infer<typeof formSchema>) {
-    void toast.promise(
-      updateGroupAsync({ newName: displayName, organiserId, groupId }),
-      { success: "Group renamed", loading: "loading...", error: "error" },
-    );
+  function onSubmit({ description, points }: z.infer<typeof formSchema>) {
+    void toast.promise(createTaskAsync({ description, points, groupId }), {
+      success: "success",
+      loading: "loading...",
+      error: "error",
+    });
   }
   return (
     <Form {...form}>
@@ -57,15 +53,29 @@ export function GroupNameForm({
       >
         <FormField
           control={form.control}
-          name="displayName"
+          name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Display Name</FormLabel>
+              <FormLabel>Descriptions</FormLabel>
+              <FormControl>
+                <Input placeholder="My Group" {...field} />
+              </FormControl>
+              <FormDescription>A description of a task</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="points"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Points</FormLabel>
               <FormControl>
                 <Input placeholder="My Group" {...field} />
               </FormControl>
               <FormDescription>
-                This is your group&apos;s public display name.
+                How many points should be awarded for this task
               </FormDescription>
               <FormMessage />
             </FormItem>

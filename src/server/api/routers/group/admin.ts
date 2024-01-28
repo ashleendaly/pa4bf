@@ -147,32 +147,92 @@ export const groupAdminRouter = createTRPCRouter({
       },
     ),
 
+  invertOwner: organiserProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { organiserId, userId, groupId } }) => {
+      if (organiserId === userId) {
+        return;
+      }
+      const isntOwner = await ctx.db
+        .select()
+        .from(groupOwnership)
+        .where(
+          and(
+            eq(groupOwnership.userId, userId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
+
+      if (isntOwner.length === 0) {
+        await ctx.db.insert(groupOwnership).values({ userId, groupId });
+      } else {
+        await ctx.db
+          .delete(groupOwnership)
+          .where(
+            and(
+              eq(groupOwnership.userId, userId),
+              eq(groupOwnership.groupId, groupId),
+            ),
+          );
+      }
+    }),
+
   makeTask: publicProcedure
     .input(
       z.object({
         groupId: z.number().int(),
-        startTime: z.coerce.date(),
-        duration: z.number().int(),
+        onOff: z.boolean().default(false),
         description: z.string(),
         points: z.number().int(),
-        aiJudge: z.boolean(),
+        aiJudge: z.boolean().default(true),
       }),
     )
     .mutation(
       async ({
         ctx,
-        input: { groupId, startTime, duration, description, points, aiJudge },
+        input: { groupId, onOff, description, points, aiJudge },
       }) => {
         return await ctx.db.insert(task).values({
-          startTime: startTime,
+          onOff: onOff,
           groupId: groupId,
-          duration: duration,
           description: description,
           points: points,
           aiJudge: aiJudge,
         });
       },
     ),
+
+  startStopTask: publicProcedure
+    .input(
+      z.object({
+        onOff: z.boolean(),
+        groupId: z.number().int(),
+        taskId: z.number().int(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { onOff, groupId, taskId } }) => {
+      await ctx.db
+        .update(task)
+        .set({ onOff: onOff })
+        .where(and(eq(task.id, taskId), eq(task.groupId, groupId)));
+    }),
+
+  deleteTask: publicProcedure
+    .input(
+      z.object({
+        groupId: z.number().int(),
+        taskId: z.number().int(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { groupId, taskId } }) => {
+      await ctx.db
+        .delete(task)
+        .where(and(eq(task.id, taskId), eq(task.groupId, groupId)));
+    }),
 
   //create group
   //delete group
@@ -181,5 +241,8 @@ export const groupAdminRouter = createTRPCRouter({
   //kick member from group
   //make member owner of group
   //remove ownership of member from group
+  //invert ownership of user
   //create task
+  //start/stop task
+  //delete task
 });

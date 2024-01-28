@@ -38,11 +38,7 @@ export default async function Page({
         </h2>
         <div className="text-lg">{"currentTask.description"}</div>
         <Separator className="my-7" />
-        <UploadButton
-          userId={userId}
-          groupId={groupId}
-          taskId={currentTask.id}
-        />
+        <UploadButton groupId={gid} taskId={currentTask.id} userId={userId} />
       </div>
     </PageWrapper>
   );

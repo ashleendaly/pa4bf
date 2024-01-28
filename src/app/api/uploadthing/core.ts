@@ -7,6 +7,7 @@ export const ourFileRouter = {
     ({ file }) => {
       console.log("Upload complete");
       console.log("file url", file.url);
+      return { url: file.url };
     },
   ),
 } satisfies FileRouter;
