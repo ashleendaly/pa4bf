@@ -14,7 +14,7 @@ export default async function Home() {
   return (
     <section>
       <div>
-        {images.length && (
+        {images.length ? (
           <>
             <div>Your Photos</div>
             {images.map((e, i) => (
@@ -27,8 +27,9 @@ export default async function Home() {
               />
             ))}
           </>
+        ) : (
+          <div>You don&apos;t have any pictures yet</div>
         )}
-        {!images.length && <div>You don&apos;t have any pictures yet</div>}
       </div>
     </section>
   );

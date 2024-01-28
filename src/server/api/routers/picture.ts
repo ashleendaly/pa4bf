@@ -185,6 +185,22 @@ export const pictureRouter = createTRPCRouter({
       }[];
     }),
 
+  getForGroup: publicProcedure
+    .input(
+      z.object({
+        groupId: z.number().int(),
+      }),
+    )
+    .query(async ({ ctx, input: { groupId } }) => {
+      return (
+        (await ctx.db
+          .select()
+          .from(groupPicture)
+          .where(eq(groupPicture.groupId, groupId))
+          .innerJoin(picture, eq(picture.id, groupPicture.pictureId))) ?? []
+      );
+    }),
+
   //create picture
   //delete picture
   //update caption
