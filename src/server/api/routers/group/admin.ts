@@ -187,6 +187,19 @@ export const groupAdminRouter = createTRPCRouter({
         .where(and(eq(task.id, taskId), eq(task.groupId, groupId)));
     }),
 
+  deleteTask: publicProcedure
+    .input(
+      z.object({
+        groupId: z.number().int(),
+        taskId: z.number().int(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { groupId, taskId } }) => {
+      await ctx.db
+        .delete(task)
+        .where(and(eq(task.id, taskId), eq(task.groupId, groupId)));
+    }),
+
   //create group
   //delete group
   //rename group
