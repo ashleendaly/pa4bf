@@ -10,7 +10,7 @@ export function PageWrapper({
   className?: ClassValue;
 }) {
   return (
-    <section className={cn("mx-auto w-full max-w-5xl", className)}>
+    <section className={cn("mx-auto h-[90dvh] w-full max-w-5xl", className)}>
       {children}
     </section>
   );

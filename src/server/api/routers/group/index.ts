@@ -13,6 +13,7 @@ import { groupAdminRouter } from "./admin";
 export const groupRouter = createTRPCRouter({
   admin: groupAdminRouter,
 
+  // TODO: should be organiser procedure (can't get it to work)
   create: publicProcedure
     .input(
       z.object({
@@ -20,7 +21,7 @@ export const groupRouter = createTRPCRouter({
         displayName: z.string(),
       }),
     )
-    .mutation(async ({ ctx, input: { userId, displayName } }) => {
+    .mutation(async ({ ctx, input: { displayName, userId } }) => {
       const inviteCode = generateRandomWords({
         exactly: 1,
         wordsPerString: 3,
@@ -39,6 +40,7 @@ export const groupRouter = createTRPCRouter({
       await ctx.db.insert(groupMembership).values({ groupId, userId });
       await ctx.db.insert(groupOwnership).values({ groupId, userId });
 
+      console.log("-------->", groupId);
       return groupId;
     }),
 
@@ -81,10 +83,6 @@ export const groupRouter = createTRPCRouter({
           ),
         );
 
-      if (isOwner.length === 0) {
-        return false;
-      }
-
-      return true;
+      return isOwner.length !== 0;
     }),
 });

@@ -1,16 +1,17 @@
-import { getSession } from "@auth0/nextjs-auth0";
-import { api } from "~/trpc/server";
 import { z } from "zod";
+import { getUserId } from "~/components/auth";
+import { PageWrapper } from "~/components/page-wrapper";
+import { Separator } from "~/components/ui/separator";
 import { UploadButton } from "~/components/upload-button";
+import { api } from "~/trpc/server";
 
 export default async function Page({
   params: { groupId },
 }: {
   params: { groupId: string };
 }) {
-  const session = await getSession();
-  if (!session) return <>not authorized</>;
-  const userId = session.user.sid as string;
+  const userId = await getUserId();
+  if (!userId) return <>not authorized</>;
 
   const gid = z.coerce.number().int().parse(groupId);
 
@@ -21,10 +22,16 @@ export default async function Page({
 
   if (!currentTask)
     return (
-      <div className="grid place-items-center text-2xl">
-        Looks like you&apos;re all caught up! 🎉 Take a moment to relax and
-        enjoy your free time.
-      </div>
+      <PageWrapper className="grid place-items-center">
+        <div className="flex flex-col items-center gap-4">
+          <h2 className="text-3xl underline decoration-violet-400 underline-offset-2">
+            Your current task!
+          </h2>
+          <div className="text-lg">{"currentTask.description"}</div>
+          <Separator className="my-7" />
+          <UploadButton />
+        </div>
+      </PageWrapper>
     );
 
   const hasCompletedTask = await api.task.hasCompletedTask.query({
@@ -33,18 +40,23 @@ export default async function Page({
     taskId: currentTask.id,
   });
 
-  if (hasCompletedTask)
-    return (
-      <div className="grid place-items-center text-2xl">
-        Looks like you&apos;re all caught up! 🎉 Take a moment to relax and
-        enjoy your free time.
-      </div>
-    );
+  if (hasCompletedTask) return <CaughtUp />;
 
   return (
-    <>
+    <PageWrapper className="grid place-items-center text-2xl">
+      <h2>Your current task!</h2>
       <div>{currentTask.description}</div>
+      <Separator />
       <UploadButton />
-    </>
+    </PageWrapper>
+  );
+}
+
+function CaughtUp() {
+  return (
+    <PageWrapper className="grid place-items-center text-2xl">
+      Looks like you&apos;re all caught up! 🎉 Take a moment to relax and enjoy
+      your free time.
+    </PageWrapper>
   );
 }

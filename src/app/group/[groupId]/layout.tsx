@@ -1,4 +1,3 @@
-import { getSession } from "@auth0/nextjs-auth0";
 import { type ReactNode } from "react";
 import { z } from "zod";
 import { getUserId } from "~/components/auth";
