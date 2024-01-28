@@ -14,8 +14,8 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { type Task } from "~/server/db/schema";
+import { api } from "~/trpc/react";
 
-// TODO: add status (need to change task model in schema)
 export const columns: ColumnDef<Task>[] = [
   {
     id: "select",
@@ -66,15 +66,39 @@ export const columns: ColumnDef<Task>[] = [
     }) => (aiJudge ? <Check /> : <X />),
   },
   {
+    id: "onOff",
+    accessorKey: "onOff",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
+    cell: ({
+      row: {
+        original: { groupId, id, onOff },
+      },
+    }) => {
+      const { mutateAsync: startStopAsync } =
+        api.group.admin.startStopTask.useMutation();
+      return (
+        <Button
+          onClick={() => startStopAsync({ groupId, onOff: !onOff, taskId: id })}
+        >
+          {!onOff ? "Start" : "Stop"}
+        </Button>
+      );
+    },
+  },
+  {
     id: "actions",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Actions" />
     ),
     cell: ({
       row: {
-        original: { id },
+        original: { groupId, id },
       },
     }) => {
+      const { mutateAsync: deleteTaskAsync } =
+        api.group.admin.deleteTask.useMutation();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -87,15 +111,11 @@ export const columns: ColumnDef<Task>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Button className="w-full" variant="outline">
-                {id ? "Make Organiser" : "Make Member"}
-              </Button>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
               <Button
                 className="flex w-full gap-2"
                 variant="destructive"
                 size="icon"
+                onClick={() => deleteTaskAsync({ groupId, taskId: id })}
               >
                 Delete
                 <Trash2 className="h-4 w-4" />

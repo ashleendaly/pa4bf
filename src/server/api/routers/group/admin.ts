@@ -147,6 +147,40 @@ export const groupAdminRouter = createTRPCRouter({
       },
     ),
 
+  invertOwner: organiserProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { organiserId, userId, groupId } }) => {
+      if (organiserId === userId) {
+        return;
+      }
+      const isntOwner = await ctx.db
+        .select()
+        .from(groupOwnership)
+        .where(
+          and(
+            eq(groupOwnership.userId, userId),
+            eq(groupOwnership.groupId, groupId),
+          ),
+        );
+
+      if (isntOwner.length === 0) {
+        await ctx.db.insert(groupOwnership).values({ userId, groupId });
+      } else {
+        await ctx.db
+          .delete(groupOwnership)
+          .where(
+            and(
+              eq(groupOwnership.userId, userId),
+              eq(groupOwnership.groupId, groupId),
+            ),
+          );
+      }
+    }),
+
   makeTask: publicProcedure
     .input(
       z.object({
