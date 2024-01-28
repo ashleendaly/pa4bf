@@ -8,15 +8,15 @@ import {
 
 import { PictureCard } from "./picture-card";
 
-type Picture = { caption: string; id: number; url: string };
+export type GridPicture = { caption: string; id: number; url: string };
 
-export const columns: ColumnDef<Picture>[] = [
+export const columns: ColumnDef<GridPicture>[] = [
   { accessorKey: "id" },
   { accessorKey: "url" },
   { accessorKey: "caption" },
 ];
 
-export function PictureGrid({ data }: { data: Picture[] }) {
+export function PictureGrid({ data }: { data: GridPicture[] }) {
   const table = useReactTable({
     data,
     columns,

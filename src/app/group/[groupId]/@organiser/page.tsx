@@ -29,6 +29,8 @@ export default async function Page({
 
   const taskData = await api.task.viewAllTasks.query({ groupId: gid });
 
+  const pictures = await api.picture.getForGroup.query({ groupId: gid });
+
   return (
     <PageWrapper className="pt-16">
       <h1 className="mb-6 ml-3 text-5xl">{displayName}</h1>
@@ -61,7 +63,7 @@ export default async function Page({
           <TasksTab taskData={taskData} />
         </TabsContent>
         <TabsContent value="pictures">
-          <PictureGrid />
+          <PictureGrid images={pictures} />
         </TabsContent>
       </Tabs>
     </PageWrapper>
