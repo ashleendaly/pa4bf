@@ -93,6 +93,7 @@ export const organiserProcedure = t.procedure
     if (isOwner.length === 0) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
+        message: "User is not an organiser in this group",
       });
     }
 
@@ -112,9 +113,13 @@ export const memberProcedure = t.procedure
         ),
       );
 
+    console.log("--------->", userId);
+    console.log("--------->", groupId);
+
     if (isMember.length === 0) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
+        message: "User is not a member in this group",
       });
     }
 

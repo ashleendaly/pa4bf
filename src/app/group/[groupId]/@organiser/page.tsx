@@ -6,6 +6,7 @@ import { AdminTab } from "./admin-tab";
 
 import { MembersTab } from "./members-tab";
 import { TasksTab } from "./tasks-tab";
+import { PageWrapper } from "~/components/page-wrapper";
 
 export default async function Page({
   params: { groupId },
@@ -17,27 +18,32 @@ export default async function Page({
   const userId = await getUserId();
   if (!userId) return;
 
-  const [groupData] = await api.group.details.query({
-    userId,
-    groupId: gid,
-  });
+  const groupData = await api.group.details.query({ groupId: gid, userId });
 
-  if (!groupData) return <div>group does not exist</div>;
+  if (!groupData[0]) return <div>group does not exist</div>;
 
-  const { displayName, inviteCode } = groupData;
+  const { displayName, inviteCode } = groupData[0];
 
   return (
-    <div>
-      <h1>{displayName}</h1>
-      <Tabs defaultValue="admin" className="w-[400px]">
-        <TabsList>
-          <TabsTrigger value="admin">Admin</TabsTrigger>
-          <TabsTrigger value="members">Members</TabsTrigger>
-          <TabsTrigger value="tasks">Tasks</TabsTrigger>
-          <TabsTrigger value="pictures">Pictures</TabsTrigger>
+    <PageWrapper>
+      <h1 className="mb-6 ml-3 text-5xl">{displayName}</h1>
+      <Tabs defaultValue="admin" className="w-full">
+        <TabsList className="w-full">
+          <TabsTrigger className="w-full" value="admin">
+            Admin
+          </TabsTrigger>
+          <TabsTrigger className="w-full" value="members">
+            Members
+          </TabsTrigger>
+          <TabsTrigger className="w-full" value="tasks">
+            Tasks
+          </TabsTrigger>
+          <TabsTrigger className="w-full" value="pictures">
+            Pictures
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="admin">
-          <AdminTab inviteCode={inviteCode} />
+          <AdminTab displayName={displayName} inviteCode={inviteCode} />
         </TabsContent>
         <TabsContent value="members">
           <MembersTab />
@@ -49,7 +55,7 @@ export default async function Page({
           <PicturesTab />
         </TabsContent>
       </Tabs>
-    </div>
+    </PageWrapper>
   );
 }
 

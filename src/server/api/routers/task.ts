@@ -30,6 +30,7 @@ export const taskRouter = createTRPCRouter({
         return startTime <= now && endTime >= now;
       });
     }),
+
   hasCompletedTask: memberProcedure
     .input(
       z.object({
