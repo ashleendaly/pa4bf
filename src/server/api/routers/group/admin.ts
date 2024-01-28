@@ -234,6 +234,19 @@ export const groupAdminRouter = createTRPCRouter({
         .where(and(eq(task.id, taskId), eq(task.groupId, groupId)));
     }),
 
+  getAllUsers: publicProcedure
+    .input(
+      z.object({
+        groupId: z.number().int(),
+      }),
+    )
+    .query(async ({ ctx, input: { groupId } }) => {
+      return await ctx.db
+        .select()
+        .from(groupMembership)
+        .where(eq(groupMembership.groupId, groupId));
+    }),
+
   //create group
   //delete group
   //rename group
@@ -245,4 +258,5 @@ export const groupAdminRouter = createTRPCRouter({
   //create task
   //start/stop task
   //delete task
+  // get all users
 });

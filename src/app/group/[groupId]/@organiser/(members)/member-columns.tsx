@@ -12,10 +12,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { type Member } from "./members_data";
 import { Checkbox } from "~/components/ui/checkbox";
 
-export const columns: ColumnDef<Member>[] = [
+export const columns: ColumnDef<{
+  userId: string;
+  groupId: number;
+}>[] = [
   {
     id: "select",
     header: ({ table }) => (
