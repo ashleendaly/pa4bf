@@ -85,4 +85,21 @@ export const groupRouter = createTRPCRouter({
 
       return isOwner.length !== 0;
     }),
+
+  getForUser: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input: { userId } }) => {
+      return await ctx.db
+        .select({
+          displayName: group.displayName,
+          id: group.id,
+        })
+        .from(group)
+        .innerJoin(groupMembership, eq(group.id, groupMembership.groupId))
+        .where(eq(groupMembership.userId, userId));
+    }),
 });
