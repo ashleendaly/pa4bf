@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { api } from "~/trpc/server";
 
 export function PictureGrid({ images }: { images: { picture_url: string }[] }) {
   return (

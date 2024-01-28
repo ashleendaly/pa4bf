@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { Login, getUserId } from "~/components/auth";
 import { PageWrapper } from "~/components/page-wrapper";
+import { PictureGrid } from "~/components/picture-grid";
 import { Separator } from "~/components/ui/separator";
 import { api } from "~/trpc/server";
 
@@ -11,7 +12,11 @@ export default async function Home() {
 
   const userId = (await getUserId()) ?? "";
 
-  const images = await api.picture.getForUser.query({ userId });
+  const images = Array.from(Array(10)).fill({
+    url: "/test.png",
+    id: 1,
+    caption: "caption",
+  }); //await api.picture.getForUser.query({ userId });
 
   return (
     <PageWrapper className="grid h-[90dvh] place-items-center">
@@ -20,15 +25,7 @@ export default async function Home() {
           {!!images.length && (
             <>
               <div>Your Photos</div>
-              {images.map((e, i) => (
-                <Image
-                  key={i}
-                  src={e.picture_url}
-                  width={100}
-                  height={100}
-                  alt=""
-                />
-              ))}
+              <PictureGrid data={images} />
             </>
           )}
           {!images.length && <div>You don&apos;t have any pictures yet</div>}
