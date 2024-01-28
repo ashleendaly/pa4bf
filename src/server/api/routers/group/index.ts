@@ -111,4 +111,21 @@ export const groupRouter = createTRPCRouter({
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return res as GridPicture[];
     }),
+
+  getForUser: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input: { userId } }) => {
+      return await ctx.db
+        .select({
+          displayName: group.displayName,
+          id: group.id,
+        })
+        .from(group)
+        .innerJoin(groupMembership, eq(group.id, groupMembership.groupId))
+        .where(eq(groupMembership.userId, userId));
+    }),
 });

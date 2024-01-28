@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Checkbox } from "~/components/ui/checkbox";
+import { api } from "~/trpc/react";
 
 export const columns: ColumnDef<{
   userId: string;
@@ -46,13 +47,18 @@ export const columns: ColumnDef<{
   {
     id: "actions",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Actions" />
+      <DataTableColumnHeader
+        column={column}
+        title="Actions"
+        className="text-foreground"
+      />
     ),
     cell: ({
       row: {
-        original: { userId },
+        original: { userId, groupId },
       },
     }) => {
+      const { mutateAsync: kickUserAsync } = api.group.admin.kick.useMutation();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -70,7 +76,17 @@ export const columns: ColumnDef<{
               </Button>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Button className="w-full" variant="destructive">
+              <Button
+                className="w-full"
+                variant="destructive"
+                onClick={() =>
+                  kickUserAsync({
+                    groupId,
+                    organiserId: "pkitazos.dev@gmail.com",
+                    userId,
+                  })
+                }
+              >
                 Kick User
               </Button>
             </DropdownMenuItem>

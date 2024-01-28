@@ -1,8 +1,6 @@
 "use client";
 import { DataTable } from "~/components/ui/data-table";
 import { columns } from "./member-columns";
-import { data } from "./members_data";
-import { api } from "~/trpc/react";
 
 export function MembersTab({
   membersData,
