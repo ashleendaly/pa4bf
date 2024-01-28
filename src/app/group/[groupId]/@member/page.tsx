@@ -16,6 +16,12 @@ export default async function Page({
   if (!userId) return;
   const gid = z.coerce.number().int().parse(groupId);
 
+  const details = await api.group.details.query({
+    userId,
+    groupId: gid,
+  });
+
+  const { displayName } = details[0]!;
   const images = await api.picture.getForGroup.query({ groupId: gid });
 
   const currentTask = await api.task.viewCurrentTask.query({
@@ -26,6 +32,7 @@ export default async function Page({
   return (
     <PageWrapper className="grid h-[90dvh] place-items-center">
       <div className="flex flex-col gap-5">
+        <h1 className="text-6xl">{displayName}</h1>
         {currentTask && (
           <Link href={`/group/${groupId}/task`} className="w-full ">
             <Button size="lg" className="w-full">
@@ -34,7 +41,7 @@ export default async function Page({
           </Link>
         )}
         <h1 className="mb-4 mt-6 text-3xl underline decoration-violet-400 underline-offset-2">
-          All Group pictures
+          All group pictures
         </h1>
         {images.length !== 0 ? (
           <PictureGrid data={images} />
