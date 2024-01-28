@@ -43,7 +43,7 @@ export function UploadButton({
           console.log("Files: ", res);
           res.map((f) =>
             toast.promise(
-              uploadAsync({ groupId, taskId, caption: "", url: f.url, userId }),
+              uploadAsync({ groupId, taskId, url: f.url, userId }),
               {
                 loading: "Loading...",
                 success: "photo uploaded!",
