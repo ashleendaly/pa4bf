@@ -1,7 +1,11 @@
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { createTRPCRouter, memberProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  memberProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import {
   type Task,
   task,
@@ -54,6 +58,17 @@ export const taskRouter = createTRPCRouter({
       return true;
     }),
 
-  //view task
+  viewAllTasks: publicProcedure
+    .input(
+      z.object({
+        groupId: z.number().int(),
+      }),
+    )
+    .query(async ({ ctx, input: { groupId } }) => {
+      return await ctx.db.select().from(task).where(eq(task.groupId, groupId));
+    }),
+
+  //view current task
   //has user uploaded picture for task
+  //view all tasks
 });
