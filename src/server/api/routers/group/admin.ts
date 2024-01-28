@@ -60,6 +60,17 @@ export const groupAdminRouter = createTRPCRouter({
     },
   ),
 
+  getResults: organiserProcedure.mutation(
+    async ({ ctx, input: { groupId } }) => {
+      const tasks = await ctx.db
+        .select()
+        .from(task)
+        .where(eq(task.groupId, groupId));
+
+      console.log(tasks);
+    },
+  ),
+
   kick: organiserProcedure
     .input(
       z.object({

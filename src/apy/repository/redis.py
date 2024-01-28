@@ -12,18 +12,18 @@ class RedisRepository:
         self.redis = redis.Redis(host=host, port=port, password=password)
         self.transformer = SentenceTransformer('clip-ViT-B-32')
 
-    def upload_image(self, image_url, group_id):
+    def upload_image(self, image_url, group_id, task_id):
         response = requests.get(image_url)
         image_data = io.BytesIO(response.content)
         image_key = hashlib.md5(image_url.encode()).hexdigest()
-        self.redis.hset(group_id, image_key, image_data.read())
+        self.redis.hset(f"{group_id}-{task_id}", image_key, image_data.read())
         return image_key
 
-    def get_image(self, hash, group_id):
-        return self.redis.hget(group_id, f"{hash}")
+    def get_image(self, hash, group_id, task_id):
+        return self.redis.hget(f"{group_id}-{task_id}", f"{hash}")
 
-    def vector_search(self, search_query, group_id):
-        hashes = self.redis.hkeys(group_id)
+    def vector_search(self, search_query, group_id, task_id):
+        hashes = self.redis.hkeys(f"{group_id}-{task_id}")
         images = []
         text_emb = self.transformer.encode(search_query)
         for hash in hashes:

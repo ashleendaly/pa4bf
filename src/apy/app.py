@@ -6,6 +6,12 @@ from pydantic import BaseModel
 class ReqData(BaseModel):
     image_url: str
     group_id: int
+    task_id: int
+
+class SearchQuery(BaseModel):
+    search_query: str
+    group_id: int
+    task_id: int
 
 app = FastAPI()
 
@@ -18,7 +24,7 @@ def hello_world():
 
 @app.post("/apy/upload")
 async def upload(data: ReqData, request: Request):
-    return request.app.state.redis_repo.upload_image(data.image_url,data.group_id)
+    return request.app.state.redis_repo.upload_image(data.image_url,data.group_id, data.task_id)
     
 @app.get("/apy/download")
 async def download(hash, group_id, request: Request):
@@ -27,8 +33,8 @@ async def download(hash, group_id, request: Request):
 
 
 @app.get("/apy/search")
-async def search(search_query, group_id, request: Request):
-    return request.app.state.redis_repo.vector_search(search_query, group_id)
+async def search(data: SearchQuery, request: Request):
+    return request.app.state.redis_repo.vector_search(data.search_query, data.group_id, data.task_id)
 
 @app.post("/apy/notification")
 async def send_notification(request: Request):
