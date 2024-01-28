@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { api } from "~/trpc/server";
 import { AdminTab } from "./admin-tab";
 import { MembersTab } from "./members-tab";
+import { TasksTab } from "./tasks-tab";
 
 export default async function Page({
   params: { groupId },

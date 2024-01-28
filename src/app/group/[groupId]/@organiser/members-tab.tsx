@@ -1,6 +1,6 @@
 import { DataTable } from "~/components/ui/data-table";
 import { columns } from "./columns";
-import { data } from "./data";
+import { data } from "./members_data";
 
 export function MembersTab() {
   return (
