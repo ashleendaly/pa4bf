@@ -43,7 +43,11 @@ export default async function Page({
           </TabsTrigger>
         </TabsList>
         <TabsContent value="admin">
-          <AdminTab displayName={displayName} inviteCode={inviteCode} />
+          <AdminTab
+            groupId={gid}
+            displayName={displayName}
+            inviteCode={inviteCode}
+          />
         </TabsContent>
         <TabsContent value="members">
           <MembersTab />
