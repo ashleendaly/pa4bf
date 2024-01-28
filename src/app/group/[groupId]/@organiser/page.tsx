@@ -64,7 +64,7 @@ export default async function Page({
           <MembersTab membersData={membersData} />
         </TabsContent>
         <TabsContent value="tasks">
-          <TasksTab taskData={taskData} />
+          <TasksTab taskData={taskData} groupId={gid} />
         </TabsContent>
         <TabsContent value="pictures">
           <div className="mt-16">
