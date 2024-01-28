@@ -1,5 +1,5 @@
 import { Aperture } from "lucide-react";
-import { AuthButton } from "./auth";
+import { UserButton } from "./auth";
 
 export function Header() {
   return (
@@ -8,7 +8,7 @@ export function Header() {
         <Aperture className="h-9 w-9" />
         PA4BF
       </h1>
-      <AuthButton />
+      <UserButton />
     </div>
   );
 }
