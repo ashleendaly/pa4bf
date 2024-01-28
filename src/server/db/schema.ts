@@ -3,12 +3,12 @@
 
 import { type InferSelectModel, relations } from "drizzle-orm";
 import {
-  boolean,
   integer,
   pgTableCreator,
   primaryKey,
   serial,
   text,
+  boolean,
   timestamp,
 } from "drizzle-orm/pg-core";
 
@@ -42,6 +42,21 @@ export const userPicture = createTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.userId, t.pictureId] }),
+  }),
+);
+
+export const taskPicture = createTable(
+  "task_picture",
+  {
+    pictureId: integer("picture_id")
+      .notNull()
+      .references(() => picture.id),
+    taskId: integer("task_id")
+      .notNull()
+      .references(() => task.id),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.taskId, t.pictureId] }),
   }),
 );
 

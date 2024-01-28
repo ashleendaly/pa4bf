@@ -3,5 +3,10 @@ export default async function Page({
 }: {
   params: { groupId: string };
 }) {
-  return <>member - {groupId}</>;
+  return (
+    <>
+      <div>Member - {groupId}</div>
+      <div></div>
+    </>
+  );
 }
