@@ -51,9 +51,6 @@ export default async function Page({
   );
 }
 
-function MembersTab() {
-  return <>members</>;
-}
 function PicturesTab() {
   return <>pics</>;
 }
