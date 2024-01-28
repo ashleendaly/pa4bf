@@ -74,7 +74,7 @@ export default function RootLayout({
           <TRPCReactProvider>
             <ThemeProvider attribute="class" defaultTheme="system">
               <Header />
-              <main className="min-h-[90dvh] w-full bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+              <main className="h-full min-h-[90dvh] w-full bg-gradient-to-b from-[#2e026d] to-[#15162c]">
                 {children}
               </main>
               <Toaster />

@@ -25,7 +25,7 @@ export default async function Page({
   const { displayName, inviteCode } = groupData[0];
 
   return (
-    <PageWrapper>
+    <PageWrapper className="pt-16">
       <h1 className="mb-6 ml-3 text-5xl">{displayName}</h1>
       <Tabs defaultValue="admin" className="w-full">
         <TabsList className="w-full">
