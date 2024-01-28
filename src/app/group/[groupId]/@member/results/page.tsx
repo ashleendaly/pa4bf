@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { getUserId } from "~/components/auth";
 import { PageWrapper } from "~/components/page-wrapper";
+import { PictureGrid } from "~/components/picture-grid";
 import { Separator } from "~/components/ui/separator";
 import { api } from "~/trpc/server";
 
@@ -14,6 +15,11 @@ export default async function Page({
 
   const gid = z.coerce.number().int().parse(groupId);
 
+  const results = await api.group.getWinnersForGroup.query({
+    userId,
+    groupId: gid,
+  });
+
   return (
     <PageWrapper className="grid place-items-center">
       <div className="flex flex-col items-center gap-4">
@@ -22,7 +28,7 @@ export default async function Page({
         </h2>
 
         <Separator className="my-7" />
-        {/* pictures */}
+        <PictureGrid data={results} />
       </div>
     </PageWrapper>
   );

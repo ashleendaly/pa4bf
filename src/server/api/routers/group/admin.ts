@@ -91,26 +91,30 @@ export const groupAdminRouter = createTRPCRouter({
         }),
       );
 
-      return results.map((e) => {
-        if (!e) return;
-        return Object.entries(e)
-          .sort(([_a, a], [_b, b]) => a - b)
-          .slice(9);
-      });
+      return results
+        .map((e) => {
+          if (!e) return;
+          return Object.entries(e)
+            .sort(([_a, a], [_b, b]) => a - b)
+            .map(([e]) => e)[0];
+        })
+        .filter(Boolean) as string[];
     },
   ),
 
-  setWinner: organiserProcedure
+  setWinners: organiserProcedure
     .input(
       z.object({
-        hash: z.string(),
+        hashes: z.array(z.string()),
       }),
     )
-    .mutation(async ({ ctx, input: { hash } }) => {
-      await ctx.db
-        .update(picture)
-        .set({ winner: true })
-        .where(eq(picture.redis_hash, hash));
+    .mutation(async ({ ctx, input: { hashes } }) => {
+      for (const hash of hashes) {
+        await ctx.db
+          .update(picture)
+          .set({ winner: true })
+          .where(eq(picture.redis_hash, hash));
+      }
     }),
 
   kick: organiserProcedure

@@ -15,6 +15,7 @@ export function ResultsButton({
   const router = useRouter();
   const { mutateAsync: calcAsync } =
     api.group.admin.calculateResults.useMutation();
+  const { mutateAsync: setWinners } = api.group.admin.setWinners.useMutation();
   return (
     <Button
       className="mt-2"
@@ -22,7 +23,9 @@ export function ResultsButton({
       onClick={() =>
         void toast.promise(
           () =>
-            calcAsync({ groupId, organiserId }).then(() => router.refresh()),
+            calcAsync({ groupId, organiserId })
+              .then((res) => setWinners({ groupId, organiserId, hashes: res }))
+              .then(() => router.refresh()),
           {
             success: "The gods have spoken",
             loading: "loading...",

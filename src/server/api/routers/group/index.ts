@@ -7,8 +7,15 @@ import {
   memberProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { group, groupMembership, groupOwnership } from "~/server/db/schema";
+import {
+  group,
+  groupMembership,
+  groupOwnership,
+  groupPicture,
+  picture,
+} from "~/server/db/schema";
 import { groupAdminRouter } from "./admin";
+import { type GridPicture } from "~/components/picture-grid";
 
 export const groupRouter = createTRPCRouter({
   admin: groupAdminRouter,
@@ -84,5 +91,24 @@ export const groupRouter = createTRPCRouter({
         );
 
       return isOwner.length !== 0;
+    }),
+
+  getWinnersForGroup: memberProcedure
+    .input(z.object({ groupId: z.number().int() }))
+    .query(async ({ ctx, input: { groupId } }) => {
+      const res = await ctx.db
+        .select({
+          url: picture.url,
+          caption: picture.caption,
+          id: picture.id,
+        })
+        .from(picture)
+        .innerJoin(groupPicture, eq(groupPicture.pictureId, picture.id))
+        .where(
+          and(eq(groupPicture.groupId, groupId), eq(picture.winner, true)),
+        );
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return res as GridPicture[];
     }),
 });
