@@ -241,5 +241,8 @@ export const groupAdminRouter = createTRPCRouter({
   //kick member from group
   //make member owner of group
   //remove ownership of member from group
+  //invert ownership of user
   //create task
+  //start/stop task
+  //delete task
 });
