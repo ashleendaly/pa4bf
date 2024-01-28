@@ -4,6 +4,7 @@ import { GroupNameForm } from "./group-name-form";
 import { RotateInviteCode } from "./rotate-invite-code";
 import { getUserId } from "~/components/auth";
 import { NewTaskForm } from "./new-task-form";
+import { Button } from "~/components/ui/button";
 
 export async function AdminTab({
   groupId,
@@ -17,22 +18,42 @@ export async function AdminTab({
   const organiserId = (await getUserId())!;
 
   return (
-    <div className="mt-10">
+    <div className="mt-10 pb-28">
+      <h2 className="mb-3 text-2xl underline decoration-violet-400 underline-offset-4">
+        Rename Group
+      </h2>
       <GroupNameForm
         organiserId={organiserId}
         currentDisplayName={displayName}
         groupId={groupId}
       />
       <Separator className="my-12" />
+      <h2 className="mb-3 text-2xl underline decoration-violet-400 underline-offset-4">
+        Change Invite Code
+      </h2>
       <RotateInviteCode
         groupId={groupId}
         organiserId={organiserId}
         inviteCode={inviteCode}
       />
+
       <Separator className="my-12" />
-      <DeleteGroupButton groupId={groupId} organiserId={organiserId} />
-      <Separator />
+      <h2 className="mb-3 text-2xl underline decoration-violet-400 underline-offset-4">
+        Create a new task
+      </h2>
       <NewTaskForm groupId={groupId} />
+      <Separator className="my-12" />
+      <h2 className="mb-3 text-2xl underline decoration-violet-400 underline-offset-4">
+        Ask the AI Gods for the winner
+      </h2>
+      <Button className="mt-2" size="lg">
+        Calculate Results
+      </Button>
+      <Separator className="my-12" />
+      <h2 className="mb-3 text-2xl underline decoration-red-400 underline-offset-4">
+        Danger Zone
+      </h2>
+      <DeleteGroupButton groupId={groupId} organiserId={organiserId} />
     </div>
   );
 }

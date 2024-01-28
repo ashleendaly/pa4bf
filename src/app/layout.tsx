@@ -72,7 +72,7 @@ export default function RootLayout({
       <head />
       <Beams />
       <UserProvider>
-        <body className={cn("font-sans", fontSans.variable)}>
+        <body className={cn("bg-[#15162c] font-sans", fontSans.variable)}>
           <TRPCReactProvider>
             <ThemeProvider attribute="class" defaultTheme="system">
               <Header />

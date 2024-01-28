@@ -2,6 +2,8 @@
 
 import { type ColumnDef } from "@tanstack/react-table";
 import { Check, LucideMoreHorizontal, Trash2, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { DataTableColumnHeader } from "~/components/ui/data-table-header";
@@ -76,11 +78,24 @@ export const columns: ColumnDef<Task>[] = [
         original: { groupId, id, onOff },
       },
     }) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const router = useRouter();
       const { mutateAsync: startStopAsync } =
         api.group.admin.startStopTask.useMutation();
       return (
         <Button
-          onClick={() => startStopAsync({ groupId, onOff: !onOff, taskId: id })}
+          onClick={() =>
+            void toast.promise(
+              startStopAsync({ groupId, onOff: !onOff, taskId: id }).then(() =>
+                router.refresh(),
+              ),
+              {
+                success: "Changed task status!",
+                loading: "Loading...",
+                error: "Something went wrong",
+              },
+            )
+          }
         >
           {!onOff ? "Start" : "Stop"}
         </Button>
