@@ -126,8 +126,7 @@ export const task = createTable("task", {
   groupId: integer("group_id")
     .notNull()
     .references(() => group.id),
-  startTime: timestamp("start_time").notNull(),
-  duration: integer("duration").notNull(),
+  onOff: boolean("on_off").notNull(),
   //not sure i think this is hte best way to do this;
   // way easier to have an 'open'
   description: text("description").notNull(),
