@@ -37,13 +37,6 @@ export const columns: ColumnDef<{
     enableSorting: false,
     enableHiding: false,
   },
-  //change this one
-  {
-    accessorKey: "userId",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
-    ),
-  },
   {
     accessorKey: "userId",
     header: ({ column }) => (
