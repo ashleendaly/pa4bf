@@ -37,14 +37,15 @@ export const columns: ColumnDef<{
     enableSorting: false,
     enableHiding: false,
   },
+  //change this one
   {
-    accessorKey: "displayName",
+    accessorKey: "userId",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
   },
   {
-    accessorKey: "email",
+    accessorKey: "userId",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Email" />
     ),
