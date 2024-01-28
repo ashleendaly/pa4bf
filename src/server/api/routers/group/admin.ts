@@ -1,9 +1,8 @@
 import { and, eq } from "drizzle-orm";
-import { Rakkas } from "next/font/google";
 import { generate as generateRandomWords } from "random-words";
 import { z } from "zod";
-import { env } from "~/env";
 
+import { env } from "~/env";
 import {
   createTRPCRouter,
   organiserProcedure,

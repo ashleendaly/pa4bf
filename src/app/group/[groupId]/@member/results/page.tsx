@@ -2,7 +2,6 @@ import { z } from "zod";
 import { getUserId } from "~/components/auth";
 import { PageWrapper } from "~/components/page-wrapper";
 import { Separator } from "~/components/ui/separator";
-import { api } from "~/trpc/server";
 
 export default async function Page({
   params: { groupId },
@@ -24,15 +23,6 @@ export default async function Page({
         <Separator className="my-7" />
         {/* pictures */}
       </div>
-    </PageWrapper>
-  );
-}
-
-function CaughtUp() {
-  return (
-    <PageWrapper className="grid place-items-center text-2xl">
-      Looks like you&apos;re all caught up! 🎉 Take a moment to relax and enjoy
-      your free time.
     </PageWrapper>
   );
 }

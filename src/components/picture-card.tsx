@@ -10,7 +10,7 @@ export function PictureCard({
   selected: boolean;
 }) {
   return (
-    <div className={cn("", selected && "scale-105")}>
+    <div className={cn(selected && "scale-105")}>
       <div className="pt-4.5">
         <Image
           src={url}
