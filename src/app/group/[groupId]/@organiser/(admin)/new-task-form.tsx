@@ -22,7 +22,7 @@ const formSchema = z.object({
   description: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-  points: z.number().min(1, {
+  points: z.coerce.number().min(1, {
     message: "Add a number larger than 0.",
   }),
 });
