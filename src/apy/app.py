@@ -32,7 +32,7 @@ async def download(hash, group_id, request: Request):
     return Response(content=image_data, media_type="image/jpeg")
 
 
-@app.get("/apy/search")
+@app.post("/apy/search")
 async def search(data: SearchQuery, request: Request):
     return request.app.state.redis_repo.vector_search(data.search_query, data.group_id, data.task_id)
 

@@ -22,11 +22,14 @@ export const pictureRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input: { userId, groupId, taskId, url } }) => {
-      console.log(url, taskId);
       const res = await fetch(`http://${env.HOSTNAME}/apy/upload`, {
         headers: { "Content-Type": "application/json" },
         method: "POST",
-        body: JSON.stringify({ image_url: url, group_id: groupId }),
+        body: JSON.stringify({
+          image_url: url,
+          group_id: groupId,
+          task_id: taskId,
+        }),
       });
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const bs = await res.json();
@@ -219,6 +222,15 @@ export const pictureRouter = createTRPCRouter({
         picture_url: string;
         id: number;
       }[];
+    }),
+
+  getPictureByHash: publicProcedure
+    .input(z.object({ hash: z.string() }))
+    .query(async ({ ctx, input: { hash } }) => {
+      return await ctx.db
+        .select()
+        .from(picture)
+        .where(eq(picture.redis_hash, hash));
     }),
 
   //create picture

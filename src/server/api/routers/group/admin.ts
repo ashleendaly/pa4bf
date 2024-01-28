@@ -1,6 +1,8 @@
 import { and, eq } from "drizzle-orm";
+import { Rakkas } from "next/font/google";
 import { generate as generateRandomWords } from "random-words";
 import { z } from "zod";
+import { env } from "~/env";
 
 import {
   createTRPCRouter,
@@ -60,17 +62,40 @@ export const groupAdminRouter = createTRPCRouter({
     },
   ),
 
-  getResults: organiserProcedure.mutation(
+  calculateResults: organiserProcedure.mutation(
     async ({ ctx, input: { groupId } }) => {
       const tasks = await ctx.db
         .select()
         .from(task)
         .where(eq(task.groupId, groupId));
 
-      console.log(tasks);
+      const results = await Promise.all(
+        tasks.map(async (task) => {
+          const res = await fetch(`http://${env.HOSTNAME}/apy/search`, {
+            headers: { "Content-Type": "application/json" },
+            method: "POST",
+            body: JSON.stringify({
+              task_id: task.id,
+              group_id: groupId,
+              search_query: task.description,
+            }),
+          })
+            .then((e) => e.json())
+            .then((e) => z.record(z.string(), z.number()).safeParse(e));
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          if (!res.success) return;
+          return res.data;
+        }),
+      );
+
+      return results.map((e) => {
+        if (!e) return;
+        return Object.entries(e)
+          .sort(([_a, a], [_b, b]) => a - b)
+          .slice(9);
+      });
     },
   ),
-
   kick: organiserProcedure
     .input(
       z.object({

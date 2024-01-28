@@ -28,7 +28,7 @@ class RedisRepository:
         text_emb = self.transformer.encode(search_query)
         for hash in hashes:
             decoded_hash = hash.decode("utf-8")
-            image_bytes = self.get_image(decoded_hash)
+            image_bytes = self.get_image(decoded_hash, group_id, task_id)
             image = Image.open(io.BytesIO(image_bytes))
             images.append(image)
 
