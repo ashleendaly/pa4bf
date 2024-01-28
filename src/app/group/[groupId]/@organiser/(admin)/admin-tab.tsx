@@ -1,7 +1,7 @@
 import { Separator } from "~/components/ui/separator";
-import { GroupNameForm } from "./(tabs)/group-name-form";
-import { RotateInviteCode } from "./(tabs)/rotate-invite-code";
-import { DeleteGroupButton } from "./(tabs)/delete-group-button";
+import { DeleteGroupButton } from "../(admin)/delete-group-buttonn";
+import { GroupNameForm } from "../(admin)/group-name-formm";
+import { RotateInviteCode } from "../(admin)/rotate-invite-codee";
 
 export async function AdminTab({
   displayName,

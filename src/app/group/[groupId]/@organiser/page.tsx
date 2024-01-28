@@ -1,12 +1,12 @@
 import { z } from "zod";
+
 import { getUserId } from "~/components/auth";
+import { PageWrapper } from "~/components/page-wrapper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { api } from "~/trpc/server";
-import { AdminTab } from "./admin-tab";
-
-import { MembersTab } from "./members-tab";
-import { TasksTab } from "./tasks-tab";
-import { PageWrapper } from "~/components/page-wrapper";
+import { AdminTab } from "./(admin)/admin-tab";
+import { MembersTab } from "./(members)/members-tab";
+import { TasksTab } from "./(tasks)/tasks-tab";
 
 export default async function Page({
   params: { groupId },
