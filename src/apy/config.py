@@ -9,3 +9,6 @@ load_dotenv(ENV)
 REDIS_HOST = os.environ.get("REDIS_HOST")
 REDIS_PORT = os.environ.get("REDIS_PORT")
 REDIS_PASSWORD = os.environ.get("REDIS_PASSWORD")
+
+BEAMS_INSTANCE_ID = os.environ.get("NEXT_PUBLIC_BEAMS_INSTANCE_ID")
+BEAMS_SECRET_KEY = os.environ.get("NEXT_PUBLIC_BEAMS_SECRET_KEY")

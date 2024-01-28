@@ -15,7 +15,7 @@ export function Beams() {
         beamsClient
           .start()
           .then(() => beamsClient.getDeviceId())
-          .then(() => beamsClient.addDeviceInterest("hello"))
+          .then(() => beamsClient.addDeviceInterest("pa4bf-event"))
           .then((deviceId) =>
             console.log(
               "Successfully registered with Beams. Device ID:",
