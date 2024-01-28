@@ -46,7 +46,11 @@ export const columns: ColumnDef<{
   {
     id: "actions",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Actions" />
+      <DataTableColumnHeader
+        column={column}
+        title="Actions"
+        className="text-foreground"
+      />
     ),
     cell: ({
       row: {

@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 
@@ -21,19 +22,28 @@ export default async function Home() {
     <PageWrapper className="grid h-[90dvh] w-full max-w-7xl place-items-center">
       {userId ? (
         <>
-          <div>
+          <div className="flex items-center gap-10">
+            <Button asChild>
+              <Link href="/group/new" className="flex gap-2">
+                <Plus className="h-4 w-4" />
+                Create a new Group
+              </Link>
+            </Button>
             {groups.length ? (
-              <>
-                <h1 className="mb-14 text-4xl underline decoration-violet-400 underline-offset-2">
+              <div className="flex flex-col gap-3">
+                <h1 className="mb-4 text-4xl underline decoration-violet-400 underline-offset-2">
                   Your Groups
                 </h1>
-                {groups.map((group, i) => (
-                  <Link key={i} href={`/group/${group.id}`}>
-                    {group.displayName}
-                  </Link>
-                ))}
-                <Separator />
-              </>
+                <div className="flex gap-3">
+                  {groups.map((group, i) => (
+                    <Button variant="outline" key={i}>
+                      <Link href={`/group/${group.id}`}>
+                        {group.displayName}
+                      </Link>
+                    </Button>
+                  ))}
+                </div>
+              </div>
             ) : (
               <>
                 <h1 className="mb-14 text-4xl underline decoration-violet-400 underline-offset-2">
@@ -41,9 +51,6 @@ export default async function Home() {
                 </h1>
               </>
             )}
-            <Button asChild>
-              <Link href="/group/new">Make a new One</Link>
-            </Button>
           </div>
           <div>
             {images.length ? (
