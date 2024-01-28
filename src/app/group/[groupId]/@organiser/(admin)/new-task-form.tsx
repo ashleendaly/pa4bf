@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -28,6 +29,8 @@ const formSchema = z.object({
 });
 
 export function NewTaskForm({ groupId }: { groupId: number }) {
+  const router = useRouter();
+
   const { mutateAsync: createTaskAsync } =
     api.group.admin.makeTask.useMutation();
 
@@ -39,17 +42,22 @@ export function NewTaskForm({ groupId }: { groupId: number }) {
   });
 
   function onSubmit({ description, points }: z.infer<typeof formSchema>) {
-    void toast.promise(createTaskAsync({ description, points, groupId }), {
-      success: "success",
-      loading: "loading...",
-      error: "error",
-    });
+    void toast.promise(
+      createTaskAsync({ description, points, groupId }).then(() =>
+        router.refresh(),
+      ),
+      {
+        success: "success",
+        loading: "loading...",
+        error: "error",
+      },
+    );
   }
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex max-w-3xl gap-4 space-y-8"
+        className="flex max-w-3xl items-center gap-4"
       >
         <FormField
           control={form.control}
@@ -72,11 +80,9 @@ export function NewTaskForm({ groupId }: { groupId: number }) {
             <FormItem>
               <FormLabel>Points</FormLabel>
               <FormControl>
-                <Input placeholder="My Group" {...field} />
+                <Input placeholder="5" {...field} />
               </FormControl>
-              <FormDescription>
-                How many points should be awarded for this task
-              </FormDescription>
+              <FormDescription>Point amount</FormDescription>
               <FormMessage />
             </FormItem>
           )}

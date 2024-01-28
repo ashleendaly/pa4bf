@@ -1,5 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
+import { type GridPicture } from "~/components/picture-grid";
 import { env } from "~/env";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
@@ -10,6 +11,12 @@ import {
   taskPicture,
   userPicture,
 } from "~/server/db/schema";
+
+const defaultPics = Array.from(Array(10)).fill({
+  url: "/test.png",
+  id: 1,
+  caption: "caption",
+}) as GridPicture[];
 
 export const pictureRouter = createTRPCRouter({
   upload: publicProcedure
@@ -193,15 +200,18 @@ export const pictureRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input: { userId } }) => {
-      return ((await ctx.db
+      const res = await ctx.db
         .select({
-          picture_url: picture.url,
+          url: picture.url,
+          caption: picture.caption,
+          id: picture.id,
         })
         .from(userPicture)
         .where(eq(userPicture.userId, userId))
-        .innerJoin(picture, eq(picture.id, userPicture.pictureId))) ?? []) as {
-        picture_url: string;
-      }[];
+        .innerJoin(picture, eq(picture.id, userPicture.pictureId));
+
+      if (!res.length) return defaultPics;
+      return res as GridPicture[];
     }),
 
   getForGroup: publicProcedure
@@ -211,17 +221,18 @@ export const pictureRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input: { groupId } }) => {
-      return ((await ctx.db
+      const res = await ctx.db
         .select({
+          url: picture.url,
+          caption: picture.caption,
           id: picture.id,
-          picture_url: picture.url,
         })
         .from(groupPicture)
         .where(eq(groupPicture.groupId, groupId))
-        .innerJoin(picture, eq(picture.id, groupPicture.pictureId))) ?? []) as {
-        picture_url: string;
-        id: number;
-      }[];
+        .innerJoin(picture, eq(picture.id, groupPicture.pictureId));
+
+      if (!res.length) return defaultPics;
+      return res as GridPicture[];
     }),
 
   getPictureByHash: publicProcedure

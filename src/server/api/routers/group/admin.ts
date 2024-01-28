@@ -59,6 +59,8 @@ export const groupAdminRouter = createTRPCRouter({
         .update(group)
         .set({ inviteCode: newCode })
         .where(eq(group.id, groupId));
+
+      await new Promise((r) => setTimeout(r, 1000));
     },
   ),
 

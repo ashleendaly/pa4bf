@@ -1,8 +1,10 @@
 "use client";
 import { RefreshCcw } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
+import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 export function RotateInviteCode({
@@ -14,7 +16,8 @@ export function RotateInviteCode({
   groupId: number;
   organiserId: string;
 }) {
-  const { mutateAsync: rotateAsync } =
+  const router = useRouter();
+  const { isLoading, mutateAsync: rotateAsync } =
     api.group.admin.regenerateCode.useMutation();
 
   return (
@@ -24,14 +27,17 @@ export function RotateInviteCode({
         className="flex gap-2"
         size="lg"
         onClick={() =>
-          void toast.promise(rotateAsync({ groupId, organiserId }), {
-            success: "Invite code changed",
-            loading: "Loading...",
-            error: "error",
-          })
+          void toast.promise(
+            rotateAsync({ groupId, organiserId }).then(() => router.refresh()),
+            {
+              success: "Invite code changed",
+              loading: "Loading...",
+              error: "error",
+            },
+          )
         }
       >
-        <RefreshCcw className="h-4 w-4" />
+        <RefreshCcw className={cn("h-4 w-4", isLoading && "animate-spin")} />
         rotate
       </Button>
     </div>
