@@ -155,7 +155,7 @@ export const groupAdminRouter = createTRPCRouter({
         duration: z.number().int(),
         description: z.string(),
         points: z.number().int(),
-        aiJudge: z.boolean(),
+        aiJudge: z.boolean().default(true),
       }),
     )
     .mutation(
