@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -26,14 +25,16 @@ const formSchema = z.object({
 });
 
 export function GroupNameForm({
-  userId,
+  organiserId,
   currentDisplayName,
+  groupId,
 }: {
-  userId: string;
+  organiserId: string;
   currentDisplayName: string;
+  groupId: number;
 }) {
-  const router = useRouter();
-  const { mutateAsync: createGroupAsync } = api.group.create.useMutation();
+  const { mutateAsync: updateGroupAsync } =
+    api.group.admin.update.useMutation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,10 +45,8 @@ export function GroupNameForm({
 
   function onSubmit({ displayName }: z.infer<typeof formSchema>) {
     void toast.promise(
-      createGroupAsync({ displayName, userId }).then((groupId) =>
-        router.push(`/group/${groupId}`),
-      ),
-      { success: "success", loading: "loading...", error: "error" },
+      updateGroupAsync({ newName: displayName, organiserId, groupId }),
+      { success: "Group renamed", loading: "loading...", error: "error" },
     );
   }
   return (

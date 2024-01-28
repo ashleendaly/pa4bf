@@ -45,7 +45,7 @@ export default async function Page({
         </TabsList>
         <TabsContent value="admin">
           <AdminTab
-            userId={userId}
+            groupId={gid}
             displayName={displayName}
             inviteCode={inviteCode}
           />
