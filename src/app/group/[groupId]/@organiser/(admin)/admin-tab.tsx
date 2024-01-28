@@ -32,7 +32,7 @@ export async function AdminTab({
       <Separator className="my-12" />
       <DeleteGroupButton groupId={groupId} organiserId={organiserId} />
       <Separator />
-      <NewTaskForm organiserId={organiserId} />
+      <NewTaskForm groupId={groupId} />
     </div>
   );
 }

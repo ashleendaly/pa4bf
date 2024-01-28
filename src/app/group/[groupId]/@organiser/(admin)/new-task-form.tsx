@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -28,9 +27,9 @@ const formSchema = z.object({
   }),
 });
 
-export function NewTaskForm({ userId }: { userId: string }) {
-  const router = useRouter();
-  const { mutateAsync: createTaskAsync } = api.admin.makeTask.useMutation();
+export function NewTaskForm({ groupId }: { groupId: number }) {
+  const { mutateAsync: createTaskAsync } =
+    api.group.admin.makeTask.useMutation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,7 +39,7 @@ export function NewTaskForm({ userId }: { userId: string }) {
   });
 
   function onSubmit({ description, points }: z.infer<typeof formSchema>) {
-    void toast.promise(createTaskAsync({ description, points, userId }), {
+    void toast.promise(createTaskAsync({ description, points, groupId }), {
       success: "success",
       loading: "loading...",
       error: "error",
