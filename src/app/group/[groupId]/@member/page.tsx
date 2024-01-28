@@ -25,14 +25,17 @@ export default async function Page({
 
   return (
     <PageWrapper className="grid h-[90dvh] place-items-center">
-      {currentTask && (
-        <Link href={`/group/${groupId}/task`} className="-mt-32 w-full">
-          <Button size="lg" className="w-full">
-            Go to live task
-          </Button>
-        </Link>
-      )}
-      <div>
+      <div className="flex flex-col gap-5">
+        {currentTask && (
+          <Link href={`/group/${groupId}/task`} className="w-full ">
+            <Button size="lg" className="w-full">
+              Go to live task
+            </Button>
+          </Link>
+        )}
+        <h1 className="mb-4 mt-6 text-3xl underline decoration-violet-400 underline-offset-2">
+          All Group pictures
+        </h1>
         {images.length !== 0 ? (
           <PictureGrid data={images} />
         ) : (
